@@ -1,0 +1,22 @@
+name: uchardet
+description: Dart port for uchardet, a character set & languange detector library. This is pure dart code, should work on all platforms.
+version: 0.0.8
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.7.2
+
+# Add regular dependencies here.
+dependencies:
+  meta: ^1.16.0
+
+dev_dependencies:
+  lints: ^5.0.0
+  path: ^1.9.1
+  test: ^1.24.0
+
+topics: 
+  - uchardet
+  - character-set-detector
+  - language-detector
+  - charset-detector
