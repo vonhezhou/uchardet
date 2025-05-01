@@ -68,3 +68,4 @@ void printAllCanditates(List<CharSetCandidate> candidates) {
 - the detection is NOT 100% accurate
 - certain encodings, e.g. utf-16, will not detect languange
 - utf-16/utf-32 without BOM will NOT be detected
+- base on the code on [uchardet](https://gitlab.freedesktop.org/uchardet/uchardet), commit id: edae8e81cfb8092496f94da1a306c4c9f0ce32bb
