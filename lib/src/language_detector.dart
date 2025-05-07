@@ -38,11 +38,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+import 'package:meta/meta.dart';
+
 import './types.dart';
 import 'internal_types.dart';
 
 enum DetectLangState { detecting, found, unlikely }
 
+@internal
 class LanguageDetector {
   static const _kLangPositiveCat = 3;
   static const _kLangProbableCat = 2;
@@ -227,6 +230,7 @@ class LanguageDetector {
 
   void close() {}
 
+  @mustCallSuper
   void reset() {
     mState = DetectLangState.detecting;
     mLastOrder = -1;

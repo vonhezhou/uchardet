@@ -42,8 +42,8 @@
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
-import 'package:uchardet/src/base/ascii_utils.dart';
 
+import './base/ascii_utils.dart';
 import './types.dart';
 
 enum ProberState {
@@ -56,8 +56,10 @@ abstract class CharSetProber {
   static const kShortcutThreshold = 0.95;
 
   @protected
+  @internal
   ProberState mState = ProberState.detecting;
 
+  @internal
   bool mActive = true;
 
   // sub class, e.g. hebrew prober, might override this
@@ -66,10 +68,12 @@ abstract class CharSetProber {
   ProberState feed(Uint8List buf);
   void close() {}
 
+  @mustBeOverridden
   List<CharSetCandidate> getCandidates();
 
   bool decodeToUnicode() => false;
 
+  @mustCallSuper
   void reset() {
     mState = ProberState.detecting;
     mActive = true;
@@ -80,6 +84,7 @@ abstract class CharSetProber {
   // freed by the caller using PR_FREEIF.
   // Both functions return false in case of memory allocation failure.
   // This filter applies to all scripts which do not use English characters
+  @useResult
   Uint8List filterWithoutEnglishLetters(Uint8List aBuf) {
     var newBuf = <int>[];
 
@@ -113,6 +118,7 @@ abstract class CharSetProber {
   }
 
   //This filter applies to all scripts which contain both English characters and upper ASCII characters.
+  @useResult
   Uint8List filterWithEnglishLetters(Uint8List aBuf) {
     var newBuf = <int>[];
 
