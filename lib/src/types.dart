@@ -93,7 +93,7 @@ enum Encoding {
 }
 
 extension EncodingExtension on Encoding {
-  String get name {
+  String get displayName {
     switch (this) {
       case Encoding.ascii:
         return "ASCII";
