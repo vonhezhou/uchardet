@@ -96,6 +96,13 @@ dart run tools/gen_tests.dart
 dart format test/uchardet_test.dart
 ```
 
+## Performance
+
+The detector reuses bounded filtering buffers and shares immutable model lookups
+within each isolate. Public detection APIs and candidate ordering are preserved.
+See [benchmarks and measurements](benchmark/README.md) for reproducible VM, AOT,
+JavaScript and allocation comparisons.
+
 ## Additional information
 
 - the detection is NOT 100% accurate

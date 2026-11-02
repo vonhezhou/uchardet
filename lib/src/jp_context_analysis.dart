@@ -36,8 +36,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-import 'dart:typed_data';
-
 import 'package:meta/meta.dart';
 
 import './char_distribution.dart';
@@ -74,15 +72,17 @@ abstract class JapaneseContextAnalysis {
     }
   }
 
-  void feedOneChar(Uint8List aStr) {
-    int order;
+  /// 非双字节字符会中断假名之间的相邻关系。
+  void resetSequence() {
+    _mLastCharOrder = -1;
+  }
 
+  void feedOneChar(int firstByte, int secondByte) {
     //if we received enough data, stop here
     if (_mTotalRel > _kMaxRelThreshold) _mDone = true;
     if (_mDone) return;
 
-    //Only 2-bytes characters are of our interest
-    order = (aStr.length == 2) ? getOrder(aStr) : -1;
+    final order = getOrder(firstByte, secondByte);
     if (order != -1 && _mLastCharOrder != -1) {
       _mTotalRel++;
       //count this sequence to its category counter
@@ -96,7 +96,7 @@ abstract class JapaneseContextAnalysis {
   }
 
   @protected
-  int getOrder(Uint8List str);
+  int getOrder(int firstByte, int secondByte);
 
   //category counters, each integer counts sequences in its category
   @protected
@@ -122,10 +122,10 @@ abstract class JapaneseContextAnalysis {
 
 class SJISContextAnalysis extends JapaneseContextAnalysis {
   @override
-  int getOrder(Uint8List str) {
+  int getOrder(int firstByte, int secondByte) {
     //We only interested in Hiragana, so first byte is '\202' which is 0x82
-    if (str.length >= 2 && str[0] == 0x82 && str[1] >= 0x9f && str[1] <= 0xf1) {
-      return str[1] - 0x9f;
+    if (firstByte == 0x82 && secondByte >= 0x9f && secondByte <= 0xf1) {
+      return secondByte - 0x9f;
     }
     return -1;
   }
@@ -133,10 +133,10 @@ class SJISContextAnalysis extends JapaneseContextAnalysis {
 
 class EUCJPContextAnalysis extends JapaneseContextAnalysis {
   @override
-  int getOrder(Uint8List str) {
+  int getOrder(int firstByte, int secondByte) {
     //We only interested in Hiragana, so first byte is '\244' which is A4
-    if (str.length >= 2 && str[0] == 0xA4 && str[1] >= 0xa1 && str[1] <= 0xf3) {
-      return str[1] - 0xa1;
+    if (firstByte == 0xA4 && secondByte >= 0xa1 && secondByte <= 0xf3) {
+      return secondByte - 0xa1;
     }
     return -1;
   }

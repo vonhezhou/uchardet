@@ -101,7 +101,7 @@ class CodingStateMachine {
 
   // c should only be 8-bit value
   int nextState(int c) {
-    AssertionError(c >= 0 && c < 256);
+    assert(c >= 0 && c < 256);
 
     //for each byte we get its class , if it is first byte, we also get byte length
     int byteCls = model.classTable[c];

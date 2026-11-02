@@ -96,6 +96,7 @@ class UTF8Prober extends CharSetProber {
   final List<LanguageDetector> _mLangDetectors = [];
 
   final List<CharSetCandidate> _mCandidates = [];
+  bool _candidatesDirty = false;
 
   UTF8Prober()
     : _mCodingSM = CodingStateMachine(
@@ -112,6 +113,17 @@ class UTF8Prober extends CharSetProber {
   }
 
   @override
+  double get confidence {
+    _flushCodePoints();
+    final cf = _calcConfidence();
+    for (final detector in _mLangDetectors) {
+      final confidence = cf * detector.getConfidence();
+      if (confidence > _kCandidateThreshold) return confidence;
+    }
+    return 0.0;
+  }
+
+  @override
   bool decodeToUnicode() => true;
 
   @override
@@ -122,6 +134,7 @@ class UTF8Prober extends CharSetProber {
 
     _mCodePointBuffer.clear();
     _mCandidates.clear();
+    _candidatesDirty = false;
 
     for (var jj in _mLangDetectors) {
       jj.reset();
@@ -133,6 +146,7 @@ class UTF8Prober extends CharSetProber {
   /// 上游仅将过滤后的多字节片段送入编码状态机，其他 ASCII 仍参与语言统计。
   void feedCodePoint(int codePoint) {
     _mCodePointBuffer.add(codePoint);
+    _candidatesDirty = true;
     if (_mCodePointBuffer.length >= 1024) {
       _flushCodePoints();
     }
@@ -199,7 +213,9 @@ class UTF8Prober extends CharSetProber {
   }
 
   void _updateCandidates() {
+    if (!_candidatesDirty) return;
     _flushCodePoints();
+    _candidatesDirty = false;
     _mCandidates.clear();
     final cf = _calcConfidence();
     for (final detector in _mLangDetectors) {

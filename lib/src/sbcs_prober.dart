@@ -50,7 +50,7 @@ class SingleByteCharSetProber extends CharSetProber {
   // static const _kNeutralCat = (_kNumberOfSeqCat - 3);
   static const _kNegativeCat = 0;
 
-  SequenceModel model;
+  final SequenceModel model;
 
   // true if we need to reverse every pair in the model lookup
   final bool reversed;
@@ -76,11 +76,21 @@ class SingleByteCharSetProber extends CharSetProber {
   ProberState feed(Uint8List aBuf) {
     const kSymbolCatOrder = 250;
 
+    // 每块仅写回一次计数器，避免逐字节反复读写实例字段。
+    final charToOrderMap = model.mCharToOrderMap;
+    final freqCharCount = model.mFreqCharCount;
+    final precedenceMatrix = model.mPrecedenceMatrix;
+    final seqCounters = mSeqCounters;
+    var totalChar = mTotalChar;
+    var freqChar = mFreqChar;
+    var totalSeqs = mTotalSeqs;
+    var lastOrder = mLastOrder;
+
     int order = 0;
     for (var codeUnit in aBuf) {
-      order = model.mCharToOrderMap[codeUnit];
+      order = charToOrderMap[codeUnit];
 
-      mTotalChar++;
+      totalChar++;
       if (order == ILL) {
         /* When encountering an illegal codepoint, no need
        * to continue analyzing data. */
@@ -88,33 +98,38 @@ class SingleByteCharSetProber extends CharSetProber {
         break;
       } else if (order == CTR) {
         mCtrlChar++;
-      } else if (order < model.mFreqCharCount) {
-        mFreqChar++;
+      } else if (order < freqCharCount) {
+        freqChar++;
 
-        if (mLastOrder < model.mFreqCharCount) {
-          mTotalSeqs++;
+        if (lastOrder < freqCharCount) {
+          totalSeqs++;
           var index = 0;
           if (!reversed) {
-            index = mLastOrder * model.mFreqCharCount + order;
+            index = lastOrder * freqCharCount + order;
           } else {
             // reverse the order of the letters in the lookup
-            index = order * model.mFreqCharCount + mLastOrder;
+            index = order * freqCharCount + lastOrder;
           }
-          mSeqCounters[model.mPrecedenceMatrix[index]] += 1;
-        } else if (mLastOrder < kSymbolCatOrder) {
-          mSeqCounters[_kNegativeCat]++;
-          mTotalSeqs++;
+          seqCounters[precedenceMatrix[index]] += 1;
+        } else if (lastOrder < kSymbolCatOrder) {
+          seqCounters[_kNegativeCat]++;
+          totalSeqs++;
         }
       } else if (order < kSymbolCatOrder) {
         mOutChar++;
 
-        if (mLastOrder < kSymbolCatOrder) {
-          mTotalSeqs++;
-          mSeqCounters[_kNegativeCat]++;
+        if (lastOrder < kSymbolCatOrder) {
+          totalSeqs++;
+          seqCounters[_kNegativeCat]++;
         }
       }
-      mLastOrder = order;
+      lastOrder = order;
     }
+
+    mTotalChar = totalChar;
+    mFreqChar = freqChar;
+    mTotalSeqs = totalSeqs;
+    mLastOrder = lastOrder;
 
     if (mState == ProberState.detecting) {
       const kSingleByteEnoughRelThreshold = 1024;
@@ -157,9 +172,10 @@ class SingleByteCharSetProber extends CharSetProber {
     ];
   }
 
-  double getConfidence() {
-    return _calcConfidence();
-  }
+  @override
+  double get confidence => _calcConfidence();
+
+  double getConfidence() => confidence;
 
   double _calcConfidence() {
     double r = 0.0;

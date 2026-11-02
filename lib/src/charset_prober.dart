@@ -70,6 +70,9 @@ abstract class CharSetProber {
 
   List<CharSetCandidate> getCandidates();
 
+  /// 内部比较不应为了读取一个数值而创建候选列表。
+  double get confidence => getCandidates().firstOrNull?.confidence ?? 0.0;
+
   bool decodeToUnicode() => false;
 
   @mustCallSuper
@@ -78,81 +81,81 @@ abstract class CharSetProber {
     mActive = true;
   }
 
-  // Helper functions used in the Latin1 and Group probers.
-  // both functions Allocate a new buffer for newBuf. This buffer should be
-  // freed by the caller using PR_FREEIF.
-  // Both functions return false in case of memory allocation failure.
-  // This filter applies to all scripts which do not use English characters
-  @useResult
-  Uint8List filterWithoutEnglishLetters(Uint8List aBuf) {
-    var newBuf = <int>[];
+  static final _emptyBytes = Uint8List(0);
+  Uint8List _filterBuffer = _emptyBytes;
 
-    bool meetMSB = false;
-    var ii = 0;
-    var prevPtr = 0;
-    for (ii = 0; ii < aBuf.length; ++ii) {
-      var codeUnit = aBuf[ii];
-      if (codeUnit > 0x7F) {
-        meetMSB = true;
-      } else if (!isAsciiEnglishLetter(codeUnit)) {
-        // current char is a symbol, most likely a punctuation. we treat it as segment delimiter
-        if (meetMSB && ii > prevPtr) {
-          // this segment contains more than single symbol, and it has upper ASCII, we need to keep it
-          newBuf.addAll(aBuf.sublist(prevPtr, ii));
-          newBuf.add(kAsciiWhiteSpace);
-          prevPtr = ii + 1;
-          meetMSB = false;
-        } else {
-          // ignore current segment. (either because it is just a symbol or just an English word)
-          prevPtr = ii + 1;
-        }
+  Uint8List _prepareFilterBuffer(int length) {
+    // 保留常用大小的缓冲；一次性大输入不应永久撑大实例占用。
+    if (length > 65536) return Uint8List(length);
+    if (_filterBuffer.length < length) {
+      var capacity = _filterBuffer.isEmpty ? 256 : _filterBuffer.length;
+      while (capacity < length) {
+        capacity *= 2;
       }
+      _filterBuffer = Uint8List(capacity);
     }
-
-    if (meetMSB && ii > prevPtr) {
-      newBuf.addAll(aBuf.sublist(prevPtr, ii));
-    }
-
-    return Uint8List.fromList(newBuf);
+    return _filterBuffer;
   }
 
-  //This filter applies to all scripts which contain both English characters and upper ASCII characters.
+  /// 返回的内部视图仅在下次过滤前有效，prober 必须同步消费。
   @useResult
-  Uint8List filterWithEnglishLetters(Uint8List aBuf) {
-    var newBuf = <int>[];
+  Uint8List filterWithoutEnglishLetters(Uint8List bytes) {
+    final output = _prepareFilterBuffer(bytes.length);
+    var hasHighByte = false;
+    var start = 0;
+    var written = 0;
+    for (var i = 0; i < bytes.length; i++) {
+      final byte = bytes[i];
+      if (byte > 0x7f) {
+        hasHighByte = true;
+      } else if (!isAsciiEnglishLetter(byte)) {
+        if (hasHighByte && i > start) {
+          output.setRange(written, written + i - start, bytes, start);
+          written += i - start;
+          output[written++] = kAsciiWhiteSpace;
+          hasHighByte = false;
+        }
+        start = i + 1;
+      }
+    }
+    if (hasHighByte && bytes.length > start) {
+      output.setRange(written, written + bytes.length - start, bytes, start);
+      written += bytes.length - start;
+    }
+    return written == 0
+        ? _emptyBytes
+        : Uint8List.sublistView(output, 0, written);
+  }
 
-    bool isInTag = false;
-
-    //do filtering to reduce load to probers
-    int prevPtr = 0;
-    int curPtr = 0;
-    for (curPtr = prevPtr = 0; curPtr < aBuf.length; ++curPtr) {
-      var char = aBuf[curPtr];
-      if (char == kAsciiRightAngleBracket) {
+  /// 与单字节过滤共用暂存区，保留上游 HTML 标签边界的启发式规则。
+  @useResult
+  Uint8List filterWithEnglishLetters(Uint8List bytes) {
+    final output = _prepareFilterBuffer(bytes.length);
+    var isInTag = false;
+    var start = 0;
+    var written = 0;
+    for (var i = 0; i < bytes.length; i++) {
+      final byte = bytes[i];
+      if (byte == kAsciiRightAngleBracket) {
         isInTag = false;
-      } else if (char == kAsciiLeftAngleBracket) {
+      } else if (byte == kAsciiLeftAngleBracket) {
         isInTag = true;
       }
-
-      if (!(isNonAsciiHighByte(char)) && !isAsciiEnglishLetter(char)) {
-        if (curPtr > prevPtr && !isInTag) {
-          // Current segment contains more than just a symbol
-          // and it is not inside a tag, keep it.
-          newBuf.addAll(aBuf.sublist(prevPtr, curPtr));
-          newBuf.add(kAsciiWhiteSpace);
-          prevPtr = curPtr + 1;
-        } else {
-          prevPtr = curPtr + 1;
+      if (!isNonAsciiHighByte(byte) && !isAsciiEnglishLetter(byte)) {
+        if (i > start && !isInTag) {
+          output.setRange(written, written + i - start, bytes, start);
+          written += i - start;
+          output[written++] = kAsciiWhiteSpace;
         }
+        start = i + 1;
       }
     }
-
-    // If the current segment contains more than just a symbol
-    // and it is not inside a tag then keep it.
-    if (!isInTag && prevPtr < curPtr) {
-      newBuf.addAll(aBuf.sublist(prevPtr, curPtr));
+    if (!isInTag && start < bytes.length) {
+      output.setRange(written, written + bytes.length - start, bytes, start);
+      written += bytes.length - start;
     }
-
-    return Uint8List.fromList(newBuf);
+    return written == 0
+        ? _emptyBytes
+        : Uint8List.sublistView(output, 0, written);
   }
 }

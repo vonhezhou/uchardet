@@ -38,6 +38,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+import 'dart:typed_data';
+
 import 'package:meta/meta.dart';
 
 import './types.dart';
@@ -53,13 +55,31 @@ class LanguageDetector {
   static const _kLangNegativeCat = 0;
   static const _kLangNumberOfSeqCat = 4;
 
-  LanguageModel mModel;
+  final LanguageModel mModel;
+  final Int32List _asciiOrders;
+  // 模型不可变，同一 isolate 内共享 ASCII 索引，避免每个探测器重复建表。
+  static final _asciiOrderCache = Expando<Int32List>('language ASCII orders');
+
+  static Int32List _asciiOrdersFor(LanguageModel model) {
+    final cached = _asciiOrderCache[model];
+    if (cached != null) return cached;
+    final orders = Int32List(128)..fillRange(0, 128, -1);
+    final table = model.mCharOrderTable;
+    for (var i = 0; i < table.length; i += 2) {
+      final codePoint = table[i];
+      if (codePoint >= 128) break;
+      orders[codePoint] = table[i + 1];
+    }
+    _asciiOrderCache[model] = orders;
+    return orders;
+  }
+
   DetectLangState mState = DetectLangState.detecting;
   /* Order of last character */
   int mLastOrder = 0;
 
   int mTotalSeqs = 0;
-  List<int> mSeqCounters = List<int>.filled(_kLangNumberOfSeqCat, 0);
+  final List<int> mSeqCounters = List<int>.filled(_kLangNumberOfSeqCat, 0);
 
   int mTotalChar = 0;
 
@@ -74,7 +94,8 @@ class LanguageDetector {
   int mLowFreqChar = 0;
   int mOutChar = 0;
 
-  LanguageDetector({required this.mModel}) {
+  LanguageDetector({required this.mModel})
+    : _asciiOrders = _asciiOrdersFor(mModel) {
     reset();
   }
 
@@ -289,9 +310,16 @@ class LanguageDetector {
   }
 
   int _getOrderFromCodePoint(int codePoint) {
+    if (codePoint >= 0 && codePoint < 128) return _asciiOrders[codePoint];
+    final table = mModel.mCharOrderTable;
+    if (table.isEmpty ||
+        codePoint < table.first ||
+        codePoint > table[table.length - 2]) {
+      return -1;
+    }
     int min = 0;
-    int max = (mModel.mCharOrderTable.length / 2).toInt() - 1;
-    int i = (max / 2).toInt();
+    int max = (mModel.mCharOrderTable.length ~/ 2) - 1;
+    int i = max ~/ 2;
     int c;
     while ((c = mModel.mCharOrderTable[i * 2]) != codePoint) {
       if (c > codePoint) {
@@ -306,7 +334,7 @@ class LanguageDetector {
         min = i + 1;
       }
 
-      i = (min + (max - min) / 2).toInt();
+      i = min + ((max - min) ~/ 2);
     }
 
     return (c == codePoint) ? mModel.mCharOrderTable[i * 2 + 1] : -1;

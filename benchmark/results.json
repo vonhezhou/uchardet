@@ -1,0 +1,250 @@
+{
+  "date": "2026-11-02",
+  "baseline_commit": "c22fd82ccd0a8371d66dac5c1a484e6f1dd7bf5f",
+  "optimized": "working tree after baseline",
+  "sdk": "Dart SDK version: 3.13.7 (stable) (Thu Oct 22 14:28:57 2026 -0700) on \"macos_arm64\"",
+  "node": "v26.13.0",
+  "unit": "microseconds/operation",
+  "method": {
+    "warmup_ms": 150,
+    "samples": 5,
+    "minimum_sample_ms": 100,
+    "statistic": "median",
+    "input_bytes": "approximately 1–4 KiB",
+    "serial": true
+  },
+  "runtimes": {
+    "aot": {
+      "before": {
+        "ascii/fresh": 7.979731886370891,
+        "ascii/reuse": 8.211429509811971,
+        "ascii/chunk64": 9.012527036770008,
+        "ascii/chunk1": 71.76183644189383,
+        "utf8-fr/fresh": 3315.0967741935483,
+        "utf8-fr/reuse": 3339.935483870968,
+        "utf8-fr/chunk64": 3485.7586206896553,
+        "utf8-fr/chunk1": 3352.4333333333334,
+        "utf8-zh/fresh": 1460.9565217391305,
+        "utf8-zh/reuse": 1455.5072463768115,
+        "utf8-zh/chunk64": 597.2321428571429,
+        "utf8-zh/chunk1": 1330.342105263158,
+        "shift-jis/fresh": 20.65042329134834,
+        "shift-jis/reuse": 16.935817104149027,
+        "shift-jis/chunk64": 123.2179802955665,
+        "shift-jis/chunk1": 385.9807692307692,
+        "latin1/fresh": 2935.0857142857144,
+        "latin1/reuse": 2966.0882352941176,
+        "latin1/chunk64": 3028.823529411765,
+        "latin1/chunk1": 2652.5526315789475
+      },
+      "after": {
+        "ascii/fresh": 8.022462896109106,
+        "ascii/reuse": 8.068172650262202,
+        "ascii/chunk64": 9.419743782969103,
+        "ascii/chunk1": 72.14708002883923,
+        "utf8-fr/fresh": 1297.025641025641,
+        "utf8-fr/reuse": 1275.1012658227849,
+        "utf8-fr/chunk64": 1538.4848484848485,
+        "utf8-fr/chunk1": 1330.7236842105262,
+        "utf8-zh/fresh": 400.388,
+        "utf8-zh/reuse": 402.4859437751004,
+        "utf8-zh/chunk64": 360.7517985611511,
+        "utf8-zh/chunk1": 1115.5777777777778,
+        "shift-jis/fresh": 13.454056235705638,
+        "shift-jis/reuse": 10.050954773869346,
+        "shift-jis/chunk64": 102.85097636176774,
+        "shift-jis/chunk1": 434.6363636363636,
+        "latin1/fresh": 1172.046511627907,
+        "latin1/reuse": 1191.4880952380952,
+        "latin1/chunk64": 1427.2957746478874,
+        "latin1/chunk1": 880.6228070175439
+      }
+    },
+    "jit": {
+      "before": {
+        "ascii/fresh": 3.4517741991103144,
+        "ascii/reuse": 3.5618677874341076,
+        "ascii/chunk64": 5.176406646306745,
+        "ascii/chunk1": 69.39181692094313,
+        "utf8-fr/fresh": 2552.225,
+        "utf8-fr/reuse": 2506.325,
+        "utf8-fr/chunk64": 2543.975,
+        "utf8-fr/chunk1": 2829.3888888888887,
+        "utf8-zh/fresh": 1262.4375,
+        "utf8-zh/reuse": 1268.5949367088608,
+        "utf8-zh/chunk64": 421.7857142857143,
+        "utf8-zh/chunk1": 935.0,
+        "shift-jis/fresh": 22.264692787177204,
+        "shift-jis/reuse": 18.873938478958294,
+        "shift-jis/chunk64": 58.24868957483984,
+        "shift-jis/chunk1": 182.34608378870675,
+        "latin1/fresh": 2168.68085106383,
+        "latin1/reuse": 2175.6304347826085,
+        "latin1/chunk64": 2209.3478260869565,
+        "latin1/chunk1": 2240.088888888889
+      },
+      "after": {
+        "ascii/fresh": 3.4792123299585986,
+        "ascii/reuse": 3.54073575753284,
+        "ascii/chunk64": 5.280547048262752,
+        "ascii/chunk1": 68.7888583218707,
+        "utf8-fr/fresh": 1131.112359550562,
+        "utf8-fr/reuse": 940.8691588785047,
+        "utf8-fr/chunk64": 1033.8247422680413,
+        "utf8-fr/chunk1": 1132.7191011235955,
+        "utf8-zh/fresh": 501.635,
+        "utf8-zh/reuse": 496.5792079207921,
+        "utf8-zh/chunk64": 229.98620689655172,
+        "utf8-zh/chunk1": 600.2694610778443,
+        "shift-jis/fresh": 13.518788861854555,
+        "shift-jis/reuse": 10.263752052545156,
+        "shift-jis/chunk64": 48.1381135707411,
+        "shift-jis/chunk1": 171.0957264957265,
+        "latin1/fresh": 797.2460317460317,
+        "latin1/reuse": 790.4724409448819,
+        "latin1/chunk64": 842.546218487395,
+        "latin1/chunk1": 822.2540983606557
+      }
+    },
+    "js": {
+      "before": {
+        "ascii/fresh": 4.503693028283192,
+        "ascii/reuse": 4.404898246850498,
+        "ascii/chunk64": 6.12369871402327,
+        "ascii/chunk1": 120.04801920768307,
+        "utf8-fr/fresh": 3961.5384615384614,
+        "utf8-fr/reuse": 3961.5384615384614,
+        "utf8-fr/chunk64": 4120,
+        "utf8-fr/chunk1": 4120,
+        "utf8-zh/fresh": 1176.4705882352941,
+        "utf8-zh/reuse": 1149.4252873563219,
+        "utf8-zh/chunk64": 578.0346820809249,
+        "utf8-zh/chunk1": 1538.4615384615386,
+        "shift-jis/fresh": 66.40106241699867,
+        "shift-jis/reuse": 60.24096385542169,
+        "shift-jis/chunk64": 105.15247108307045,
+        "shift-jis/chunk1": 373.13432835820896,
+        "latin1/fresh": 3703.703703703704,
+        "latin1/reuse": 3678.5714285714284,
+        "latin1/chunk64": 3703.703703703704,
+        "latin1/chunk1": 3225.8064516129034
+      },
+      "after": {
+        "ascii/fresh": 4.399472063352397,
+        "ascii/reuse": 4.304963623057385,
+        "ascii/chunk64": 6.2460961898813245,
+        "ascii/chunk1": 121.35922330097087,
+        "utf8-fr/fresh": 2195.6521739130435,
+        "utf8-fr/reuse": 2173.913043478261,
+        "utf8-fr/chunk64": 2295.4545454545455,
+        "utf8-fr/chunk1": 2148.936170212766,
+        "utf8-zh/fresh": 364.963503649635,
+        "utf8-zh/reuse": 358.42293906810033,
+        "utf8-zh/chunk64": 338.9830508474576,
+        "utf8-zh/chunk1": 1123.5955056179776,
+        "shift-jis/fresh": 18.92863903085368,
+        "shift-jis/reuse": 12.773023374632775,
+        "shift-jis/chunk64": 69.15629322268326,
+        "shift-jis/chunk1": 322.5806451612903,
+        "latin1/fresh": 2083.3333333333335,
+        "latin1/reuse": 2020,
+        "latin1/chunk64": 2083.3333333333335,
+        "latin1/chunk1": 1463.768115942029
+      }
+    }
+  },
+  "first_detection_aot": {
+    "before": {
+      "median": 4220.5,
+      "samples": [
+        4093,
+        4758,
+        4594,
+        4253,
+        3799,
+        4041,
+        4055,
+        4188,
+        4330,
+        4363
+      ]
+    },
+    "after": {
+      "median": 1602.5,
+      "samples": [
+        2592,
+        2170,
+        1634,
+        1787,
+        1585,
+        1620,
+        1512,
+        1558,
+        1579,
+        1513
+      ]
+    }
+  },
+  "allocations": {
+    "before": {
+      "operations": 500,
+      "classes": {
+        "_List": {
+          "instances": 105147,
+          "bytes": 14233904
+        },
+        "_GrowableList": {
+          "instances": 17312,
+          "bytes": 553984
+        },
+        "_Uint8List": {
+          "instances": 80716,
+          "bytes": 4179152
+        },
+        "AssertionError": {
+          "instances": 0,
+          "bytes": 0
+        },
+        "CharSetCandidate": {
+          "instances": 43632,
+          "bytes": 2094336
+        }
+      }
+    },
+    "after": {
+      "operations": 500,
+      "classes": {
+        "_List": {
+          "instances": 89547,
+          "bytes": 11963584
+        },
+        "_GrowableList": {
+          "instances": 6381,
+          "bytes": 204192
+        },
+        "_Uint8List": {
+          "instances": 1870,
+          "bytes": 1520848
+        },
+        "AssertionError": {
+          "instances": 0,
+          "bytes": 0
+        },
+        "CharSetCandidate": {
+          "instances": 2687,
+          "bytes": 128976
+        }
+      }
+    }
+  },
+  "artifact_bytes": {
+    "before": {
+      "aot": 6190896,
+      "js": 531364
+    },
+    "after": {
+      "aot": 6207312,
+      "js": 532500
+    }
+  }
+}

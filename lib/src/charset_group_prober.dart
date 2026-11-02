@@ -126,13 +126,9 @@ class CharSetGroupProber extends CharSetProber {
             continue;
           }
 
-          var firstOnProber = ii.getCandidates().firstOrNull;
-          if (firstOnProber == null) {
-            continue;
-          }
-
-          if (firstOnProber.confidence > newMaxConfidence) {
-            newMaxConfidence = firstOnProber.confidence;
+          final confidence = ii.confidence;
+          if (confidence > newMaxConfidence) {
+            newMaxConfidence = confidence;
             mBestGuessProber = ii;
           }
         }

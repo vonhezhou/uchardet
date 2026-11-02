@@ -169,6 +169,9 @@ class HebrewProber extends CharSetProber {
   }
 
   @override
+  double get confidence => _mCandidate?.confidence ?? 0.0;
+
+  @override
   List<CharSetCandidate> getCandidates() => [
     if (_mCandidate != null) _mCandidate!,
   ];
@@ -253,10 +256,7 @@ class HebrewProber extends CharSetProber {
     _mCandidate = CharSetCandidate(
       encoding: encoding,
       language: Language.hebrew,
-      confidence: max(
-        _mLogicalProb.getConfidence(),
-        _mVisualProb.getConfidence(),
-      ),
+      confidence: max(_mLogicalProb.confidence, _mVisualProb.confidence),
     );
   }
 
@@ -308,8 +308,7 @@ class HebrewProber extends CharSetProber {
     if (finalsub <= -(minFinalCharDistance)) return visualHebrewName;
 
     // It's not dominant enough, try to rely on the model scores instead.
-    double modelsub =
-        _mLogicalProb.getConfidence() - _mVisualProb.getConfidence();
+    double modelsub = _mLogicalProb.confidence - _mVisualProb.confidence;
     if (modelsub > minModelDistance) return logicalHebrewName;
     if (modelsub < -(minModelDistance)) return visualHebrewName;
 

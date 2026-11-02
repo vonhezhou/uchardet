@@ -36,8 +36,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-import 'dart:typed_data';
-
 import 'package:meta/meta.dart';
 
 import 'lang_freq/euckr_freq.dart';
@@ -53,12 +51,9 @@ abstract class CharDistributionAnalysis {
     reset(false);
   }
 
-  // Feed a character with known length
-  void feedOneChar(Uint8List aStr) {
-    int order;
-
-    //we only care about 2-bytes character in our distribution analysis
-    order = (aStr.length == 2) ? getOrder(aStr) : -1;
+  /// 仅统计双字节字符，调用方负责跳过其他长度的字符。
+  void feedOneChar(int firstByte, int secondByte) {
+    final order = getOrder(firstByte, secondByte);
 
     if (order >= 0) {
       mTotalChars++;
@@ -113,7 +108,7 @@ abstract class CharDistributionAnalysis {
   /// convert this encoding string to a number, here called order.
   /// This allow multiple encoding of a language to share one frequency table
   @protected
-  int getOrder(Uint8List str) {
+  int getOrder(int firstByte, int secondByte) {
     return -1;
   }
 
@@ -155,9 +150,9 @@ class EUCTWDistributionAnalysis extends CharDistributionAnalysis {
   //  second byte range: 0xa1 -- 0xfe
   //no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2 && str[0] >= 0xc4) {
-      return 94 * (str[0] - 0xc4) + str[1] - 0xa1;
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0xc4) {
+      return 94 * (firstByte - 0xc4) + secondByte - 0xa1;
     } else {
       return -1;
     }
@@ -175,9 +170,9 @@ class EUCKRDistributionAnalysis extends CharDistributionAnalysis {
   ///   second byte range: 0xa1 -- 0xfe
   /// no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2 && str[0] >= 0xb0) {
-      return 94 * (str[0] - 0xb0) + str[1] - 0xa1;
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0xb0) {
+      return 94 * (firstByte - 0xb0) + secondByte - 0xa1;
     } else {
       return -1;
     }
@@ -195,12 +190,9 @@ class JohabDistributionAnalysis extends CharDistributionAnalysis {
   ///   second byte range: 0x41 -- 0xfe
   /// no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2) {
-      var c = str[0];
-      if ((0x88 <= c) && (c <= 0xd3)) {
-        return _johabToEUCKR(c, str[1]);
-      }
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0x88 && firstByte <= 0xd3) {
+      return _johabToEUCKR(firstByte, secondByte);
     }
     return -1;
   }
@@ -229,9 +221,9 @@ class GB2312DistributionAnalysis extends CharDistributionAnalysis {
   ///   second byte range: 0xa1 -- 0xfe
   /// no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2 && str[0] >= 0xb0 && str[1] >= 0xa1) {
-      return 94 * (str[0] - 0xb0) + str[1] - 0xa1;
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0xb0 && secondByte >= 0xa1) {
+      return 94 * (firstByte - 0xb0) + secondByte - 0xa1;
     } else {
       return -1;
     }
@@ -246,12 +238,12 @@ class Big5DistributionAnalysis extends CharDistributionAnalysis {
   ///  second byte range: 0x40 -- 0x7e , 0xa1 -- 0xfe
   /// no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2 && str[0] >= 0xa4) {
-      if (str[1] >= 0xa1) {
-        return 157 * (str[0] - 0xa4) + str[1] - 0xa1 + 63;
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0xa4) {
+      if (secondByte >= 0xa1) {
+        return 157 * (firstByte - 0xa4) + secondByte - 0xa1 + 63;
       } else {
-        return 157 * (str[0] - 0xa4) + str[1] - 0x40;
+        return 157 * (firstByte - 0xa4) + secondByte - 0x40;
       }
     } else {
       return -1;
@@ -270,21 +262,17 @@ class SJISDistributionAnalysis extends CharDistributionAnalysis {
   //   second byte range: 0x40 -- 0x7e,  0x81 -- oxfe
   // no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length < 2) {
-      return -1;
-    }
-
+  int getOrder(int firstByte, int secondByte) {
     int order = -1;
-    if (str[0] >= 0x81 && str[0] <= 0x9f) {
-      order = 188 * (str[0] - 0x81);
-    } else if (str[0] >= 0xe0 && str[0] <= 0xef) {
-      order = 188 * (str[0] - 0xe0 + 31);
+    if (firstByte >= 0x81 && firstByte <= 0x9f) {
+      order = 188 * (firstByte - 0x81);
+    } else if (firstByte >= 0xe0 && firstByte <= 0xef) {
+      order = 188 * (firstByte - 0xe0 + 31);
     } else {
       return -1;
     }
-    order += str[1] - 0x40;
-    if (str[1] > 0x7f) {
+    order += secondByte - 0x40;
+    if (secondByte > 0x7f) {
       order--;
     }
     return order;
@@ -302,9 +290,9 @@ class EUCJPDistributionAnalysis extends CharDistributionAnalysis {
   //   second byte range: 0xa1 -- 0xfe
   // no validation needed here. State machine has done that
   @override
-  int getOrder(Uint8List str) {
-    if (str.length >= 2 && str[0] >= 0xa0) {
-      return 94 * (str[0] - 0xa1) + str[1] - 0xa1;
+  int getOrder(int firstByte, int secondByte) {
+    if (firstByte >= 0xa0) {
+      return 94 * (firstByte - 0xa1) + secondByte - 0xa1;
     } else {
       return -1;
     }

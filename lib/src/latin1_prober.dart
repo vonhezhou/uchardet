@@ -55,6 +55,9 @@ class Latin1Prober extends CharSetProber {
   }
 
   @override
+  double get confidence => _calcConfidence();
+
+  @override
   List<CharSetCandidate> getCandidates() {
     return [
       CharSetCandidate(

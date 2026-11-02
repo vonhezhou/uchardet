@@ -56,7 +56,7 @@ class SJISProber extends CharSetProber {
   final _mContextAnalyser = SJISContextAnalysis();
   final _mDistributionAnalyser = SJISDistributionAnalysis();
 
-  final Uint8List _mLastChar = Uint8List(2);
+  int _lastByte = 0;
 
   final bool _mIsPreferredLanguage;
 
@@ -67,6 +67,9 @@ class SJISProber extends CharSetProber {
       ) {
     reset();
   }
+
+  @override
+  double get confidence => _calcConfidence();
 
   @override
   List<CharSetCandidate> getCandidates() {
@@ -82,6 +85,7 @@ class SJISProber extends CharSetProber {
   @override
   void reset() {
     _mCodingSM.reset();
+    _lastByte = 0;
     _mContextAnalyser.reset(_mIsPreferredLanguage);
     _mDistributionAnalyser.reset(_mIsPreferredLanguage);
     super.reset();
@@ -99,23 +103,18 @@ class SJISProber extends CharSetProber {
       }
 
       if (codingState == eStart) {
-        var charLen = _mCodingSM.currentCharLen;
-        if (charLen != 2) {
-          _mContextAnalyser.feedOneChar(Uint8List(0));
-        } else if (ii == 0) {
-          _mLastChar[1] = aBuf[0];
-          _mContextAnalyser.feedOneChar(_mLastChar.sublist(2 - charLen, 2));
-          _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
+        if (_mCodingSM.currentCharLen == 2) {
+          final firstByte = ii == 0 ? _lastByte : aBuf[ii - 1];
+          final secondByte = aBuf[ii];
+          _mContextAnalyser.feedOneChar(firstByte, secondByte);
+          _mDistributionAnalyser.feedOneChar(firstByte, secondByte);
         } else {
-          _mContextAnalyser.feedOneChar(aBuf.sublist(ii + 1 - charLen, ii + 1));
-          _mDistributionAnalyser.feedOneChar(
-            aBuf.sublist(ii - 1, ii - 1 + charLen),
-          );
+          _mContextAnalyser.resetSequence();
         }
       }
     }
 
-    _mLastChar[0] = aBuf.last;
+    _lastByte = aBuf.last;
 
     if (mState == ProberState.detecting &&
         _mContextAnalyser.gotEnoughData() &&

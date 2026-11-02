@@ -60,6 +60,9 @@ class EUCJPProber extends CharSetProber {
   }
 
   @override
+  double get confidence => _calcConfidence();
+
+  @override
   List<CharSetCandidate> getCandidates() {
     return [
       CharSetCandidate(
@@ -76,7 +79,7 @@ class EUCJPProber extends CharSetProber {
 
   final _mDistributionAnalyser = EUCJPDistributionAnalysis();
 
-  final _mLastChar = Uint8List(2);
+  int _lastByte = 0;
 
   final bool _mIsPreferredLanguage;
 
@@ -85,6 +88,7 @@ class EUCJPProber extends CharSetProber {
     super.reset();
 
     _mCodingSM.reset();
+    _lastByte = 0;
     _mContextAnalyser.reset(_mIsPreferredLanguage);
     _mDistributionAnalyser.reset(_mIsPreferredLanguage);
   }
@@ -101,23 +105,18 @@ class EUCJPProber extends CharSetProber {
       }
 
       if (codingState == eStart) {
-        var charLen = _mCodingSM.currentCharLen;
-        if (charLen != 2) {
-          _mContextAnalyser.feedOneChar(Uint8List(0));
-        } else if (ii == 0) {
-          _mLastChar[1] = aBuf[0];
-          _mContextAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
-          _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
+        if (_mCodingSM.currentCharLen == 2) {
+          final firstByte = ii == 0 ? _lastByte : aBuf[ii - 1];
+          final secondByte = aBuf[ii];
+          _mContextAnalyser.feedOneChar(firstByte, secondByte);
+          _mDistributionAnalyser.feedOneChar(firstByte, secondByte);
         } else {
-          _mContextAnalyser.feedOneChar(aBuf.sublist(ii - 1, ii - 1 + charLen));
-          _mDistributionAnalyser.feedOneChar(
-            aBuf.sublist(ii - 1, ii - 1 + charLen),
-          );
+          _mContextAnalyser.resetSequence();
         }
       }
     }
 
-    _mLastChar[0] = aBuf.last;
+    _lastByte = aBuf.last;
 
     if (mState == ProberState.detecting &&
         _mContextAnalyser.gotEnoughData() &&

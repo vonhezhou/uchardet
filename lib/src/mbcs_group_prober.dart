@@ -121,9 +121,7 @@ class MBCSGroupProber extends CharSetProber {
 
       var st = ii.feed(aBuf);
       if (st == ProberState.foundIt) {
-        var newCandidate = ii.getCandidates().firstOrNull;
-        if (newCandidate != null &&
-            newCandidate.confidence > _kCandidateThreshold) {
+        if (ii.confidence > _kCandidateThreshold) {
           mState = ProberState.foundIt;
           break;
         }

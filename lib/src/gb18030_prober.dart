@@ -58,7 +58,7 @@ class GB18030Prober extends CharSetProber {
   //GB2312ContextAnalysis mContextAnalyser;
   final _mDistributionAnalyser = GB2312DistributionAnalysis();
 
-  final _mLastChar = Uint8List(2);
+  int _lastByte = 0;
 
   final bool _mIsPreferredLanguage;
 
@@ -69,6 +69,9 @@ class GB18030Prober extends CharSetProber {
       ) {
     reset();
   }
+
+  @override
+  double get confidence => _calcConfidence();
 
   @override
   List<CharSetCandidate> getCandidates() {
@@ -86,6 +89,7 @@ class GB18030Prober extends CharSetProber {
     super.reset();
 
     _mCodingSM.reset();
+    _lastByte = 0;
     _mDistributionAnalyser.reset(_mIsPreferredLanguage);
     //mContextAnalyser.Reset();
   }
@@ -101,23 +105,15 @@ class GB18030Prober extends CharSetProber {
         break;
       }
 
-      if (codingState == eStart) {
-        var charLen = _mCodingSM.currentCharLen;
-
-        if (charLen != 2) {
-          continue;
-        } else if (i == 0) {
-          _mLastChar[1] = aBuf[0];
-          _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
-        } else {
-          _mDistributionAnalyser.feedOneChar(
-            aBuf.sublist(i - 1, i - 1 + charLen),
-          );
-        }
+      if (codingState == eStart && _mCodingSM.currentCharLen == 2) {
+        _mDistributionAnalyser.feedOneChar(
+          i == 0 ? _lastByte : aBuf[i - 1],
+          aBuf[i],
+        );
       }
     }
 
-    _mLastChar[0] = aBuf.last;
+    _lastByte = aBuf.last;
 
     if (mState == ProberState.detecting &&
         _mDistributionAnalyser.gotEnoughData() &&

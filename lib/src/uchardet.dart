@@ -127,15 +127,21 @@ class UCharDet {
 
   void _updateWeightedCandidates() {
     _mCandidates.clear();
+    if (_mDefaultWeight == 1.0 && _mLanguageWeights.isEmpty) {
+      _mCandidates.addAll(_mRawCandidates);
+      return;
+    }
     for (final candidate in _mRawCandidates) {
-      final weighted = CharSetCandidate(
-        encoding: candidate.encoding,
-        language: candidate.language,
-        confidence:
-            candidate.confidence *
-            (_mLanguageWeights[candidate.language] ?? _mDefaultWeight),
-        hasBom: candidate.hasBom,
-      );
+      final weight = _mLanguageWeights[candidate.language] ?? _mDefaultWeight;
+      final weighted =
+          weight == 1.0
+              ? candidate
+              : CharSetCandidate(
+                encoding: candidate.encoding,
+                language: candidate.language,
+                confidence: candidate.confidence * weight,
+                hasBom: candidate.hasBom,
+              );
       final index = _mCandidates.indexWhere(
         (c) => c.confidence < weighted.confidence,
       );
@@ -198,7 +204,9 @@ class UCharDet {
     if (!_mBomChecked) {
       // 开头字节只处理一次；保留 FF FE 的歧义，直到取得第 4 字节或结束。
       final prefixLength = min(aBuf.length, 4 - _mBomBuffer.length);
-      _mBomBuffer.addAll(aBuf.sublist(0, prefixLength));
+      for (var i = 0; i < prefixLength; i++) {
+        _mBomBuffer.add(aBuf[i]);
+      }
       _tryDetectBom();
       if (_mShortCircuitCandidate != null) {
         _mDone = true;
@@ -208,14 +216,18 @@ class UCharDet {
         return false;
       }
       _mBomChecked = true;
-      return _feedData(
-        prefixLength == 4
-            ? aBuf
-            : Uint8List.fromList([
-              ..._mBomBuffer,
-              ...aBuf.sublist(prefixLength),
-            ]),
+      if (prefixLength == 4) return _feedData(aBuf);
+      final combined = Uint8List(
+        _mBomBuffer.length + aBuf.length - prefixLength,
       );
+      combined.setRange(0, _mBomBuffer.length, _mBomBuffer);
+      combined.setRange(
+        _mBomBuffer.length,
+        combined.length,
+        aBuf,
+        prefixLength,
+      );
+      return _feedData(combined);
     }
 
     return _feedData(aBuf);
@@ -354,6 +366,7 @@ class UCharDet {
        */
       _mDone = true;
       _addCandidate(_mShortCircuitCandidate!);
+      _updateWeightedCandidates();
       return;
     }
 
@@ -368,6 +381,7 @@ class UCharDet {
         }
       }
     }
+    _updateWeightedCandidates();
   }
 
   void _addCandidate(CharSetCandidate newCandi) {
@@ -399,7 +413,6 @@ class UCharDet {
     } else {
       _mRawCandidates.add(newCandi);
     }
-    _updateWeightedCandidates();
   }
 
   void _tryDetectBom({bool atEnd = false}) {
