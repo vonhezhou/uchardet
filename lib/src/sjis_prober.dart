@@ -89,6 +89,7 @@ class SJISProber extends CharSetProber {
 
   @override
   ProberState feed(Uint8List aBuf) {
+    if (aBuf.isEmpty) return mState;
     int codingState = 0;
     for (var ii = 0; ii < aBuf.length; ii++) {
       codingState = _mCodingSM.nextState(aBuf[ii]);
@@ -99,18 +100,14 @@ class SJISProber extends CharSetProber {
 
       if (codingState == eStart) {
         var charLen = _mCodingSM.currentCharLen;
-        if (charLen <= 0) {
-          // something odd happened
+        if (charLen != 2) {
+          _mContextAnalyser.feedOneChar(Uint8List(0));
         } else if (ii == 0) {
           _mLastChar[1] = aBuf[0];
-          _mContextAnalyser.feedOneChar(
-            _mLastChar.sublist(2 - charLen, 2),
-          );
+          _mContextAnalyser.feedOneChar(_mLastChar.sublist(2 - charLen, 2));
           _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
         } else {
-          _mContextAnalyser.feedOneChar(
-            aBuf.sublist(ii + 1 - charLen, ii + 1),
-          );
+          _mContextAnalyser.feedOneChar(aBuf.sublist(ii + 1 - charLen, ii + 1));
           _mDistributionAnalyser.feedOneChar(
             aBuf.sublist(ii - 1, ii - 1 + charLen),
           );

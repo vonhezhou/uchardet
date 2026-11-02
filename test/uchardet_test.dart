@@ -16,7 +16,7 @@ void main() {
       final candidates = detector.detect(kArIso88596);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-6'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ar'));
@@ -29,7 +29,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kArUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ar'));
     });
 
@@ -41,7 +44,7 @@ void main() {
       final candidates = detector.detect(kArWindows1256);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1256'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ar'));
@@ -55,7 +58,7 @@ void main() {
       final candidates = detector.detect(kBeIso88595);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-5'),
       );
       expect(candidates.first.language?.iso6391Code, equals('be'));
@@ -68,7 +71,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kBeUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('be'));
     });
 
@@ -80,7 +86,7 @@ void main() {
       final candidates = detector.detect(kBeWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('be'));
@@ -94,7 +100,7 @@ void main() {
       final candidates = detector.detect(kBgIso88595);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-5'),
       );
       expect(candidates.first.language?.iso6391Code, equals('bg'));
@@ -107,7 +113,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kBgUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('bg'));
     });
 
@@ -119,7 +128,7 @@ void main() {
       final candidates = detector.detect(kBgWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('bg'));
@@ -133,7 +142,7 @@ void main() {
       final candidates = detector.detect(kCaIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ca'));
@@ -146,7 +155,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kCaUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ca'));
     });
 
@@ -158,7 +170,7 @@ void main() {
       final candidates = detector.detect(kCaWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ca'));
@@ -171,7 +183,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kCsIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('cs'));
     });
 
@@ -183,7 +198,7 @@ void main() {
       final candidates = detector.detect(kCsIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('cs'));
@@ -197,7 +212,7 @@ void main() {
       final candidates = detector.detect(kCsMaccentraleurope);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-centraleurope'),
       );
       expect(candidates.first.language?.iso6391Code, equals('cs'));
@@ -210,7 +225,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kCsUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('cs'));
     });
 
@@ -222,7 +240,7 @@ void main() {
       final candidates = detector.detect(kCsWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('cs'));
@@ -235,7 +253,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kDaIbm865);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm865'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm865'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('da'));
     });
 
@@ -247,7 +268,7 @@ void main() {
       final candidates = detector.detect(kDaIso885915);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-15'),
       );
       expect(candidates.first.language?.iso6391Code, equals('da'));
@@ -260,7 +281,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kDaUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('da'));
     });
 
@@ -272,7 +296,7 @@ void main() {
       final candidates = detector.detect(kDaWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('da'));
@@ -286,7 +310,7 @@ void main() {
       final candidates = detector.detect(kDeIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('de'));
@@ -299,7 +323,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kDeUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('de'));
     });
 
@@ -311,7 +338,7 @@ void main() {
       final candidates = detector.detect(kDeWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('de'));
@@ -324,7 +351,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kElCp737);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('cp737'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('cp737'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('el'));
     });
 
@@ -336,7 +366,7 @@ void main() {
       final candidates = detector.detect(kElIso88597);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-7'),
       );
       expect(candidates.first.language?.iso6391Code, equals('el'));
@@ -349,7 +379,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kElUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('el'));
     });
 
@@ -361,7 +394,7 @@ void main() {
       final candidates = detector.detect(kElWindows1253);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1253'),
       );
       expect(candidates.first.language?.iso6391Code, equals('el'));
@@ -374,7 +407,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kEnAscii);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ascii'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ascii'),
+      );
     });
 
     test('detect en utf-8', () {
@@ -384,7 +420,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kEnUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('en'));
     });
 
@@ -396,7 +435,7 @@ void main() {
       final candidates = detector.detect(kEoIso88593);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-3'),
       );
       expect(candidates.first.language?.iso6391Code, equals('eo'));
@@ -409,7 +448,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kEoUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('eo'));
     });
 
@@ -421,7 +463,7 @@ void main() {
       final candidates = detector.detect(kEsIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('es'));
@@ -434,7 +476,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kEsUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('es'));
     });
 
@@ -446,7 +491,7 @@ void main() {
       final candidates = detector.detect(kEsWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('es'));
@@ -460,7 +505,7 @@ void main() {
       final candidates = detector.detect(kEtIso885913);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-13'),
       );
       expect(candidates.first.language?.iso6391Code, equals('et'));
@@ -474,7 +519,7 @@ void main() {
       final candidates = detector.detect(kEtIso885915);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-15'),
       );
       expect(candidates.first.language?.iso6391Code, equals('et'));
@@ -488,7 +533,7 @@ void main() {
       final candidates = detector.detect(kEtIso88594);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-4'),
       );
       expect(candidates.first.language?.iso6391Code, equals('et'));
@@ -501,7 +546,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kEtUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('et'));
     });
 
@@ -513,7 +561,7 @@ void main() {
       final candidates = detector.detect(kEtWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('et'));
@@ -527,7 +575,7 @@ void main() {
       final candidates = detector.detect(kEtWindows1257);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1257'),
       );
       expect(candidates.first.language?.iso6391Code, equals('et'));
@@ -541,7 +589,7 @@ void main() {
       final candidates = detector.detect(kFiIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('fi'));
@@ -554,7 +602,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kFiUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('fi'));
     });
 
@@ -566,7 +617,7 @@ void main() {
       final candidates = detector.detect(kFrIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('fr'));
@@ -580,7 +631,7 @@ void main() {
       final candidates = detector.detect(kFrIso885915);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-15'),
       );
       expect(candidates.first.language?.iso6391Code, equals('fr'));
@@ -593,7 +644,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kFrUtf16be);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-16be'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-16be'),
+      );
     });
 
     test('detect fr utf-32le', () {
@@ -603,7 +657,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kFrUtf32le);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-32le'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-32le'),
+      );
     });
 
     test('detect fr utf-8', () {
@@ -613,7 +670,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kFrUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('fr'));
     });
 
@@ -625,7 +685,7 @@ void main() {
       final candidates = detector.detect(kFrWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('fr'));
@@ -639,7 +699,7 @@ void main() {
       final candidates = detector.detect(kGaIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ga'));
@@ -652,7 +712,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kGaUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ga'));
     });
 
@@ -664,7 +727,7 @@ void main() {
       final candidates = detector.detect(kGaWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ga'));
@@ -677,7 +740,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHeIbm862);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm862'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm862'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('he'));
     });
 
@@ -688,7 +754,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHeIbm862);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm862'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm862'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('he'));
     });
 
@@ -699,7 +768,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHeUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('he'));
     });
 
@@ -711,7 +783,7 @@ void main() {
       final candidates = detector.detect(kHeWindows1255);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1255'),
       );
       expect(candidates.first.language?.iso6391Code, equals('he'));
@@ -724,7 +796,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHiUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('hi'));
     });
 
@@ -735,7 +810,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHrIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
     });
 
@@ -747,7 +825,7 @@ void main() {
       final candidates = detector.detect(kHrIso885913);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-13'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
@@ -761,7 +839,7 @@ void main() {
       final candidates = detector.detect(kHrIso885916);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-16'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
@@ -775,7 +853,7 @@ void main() {
       final candidates = detector.detect(kHrIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
@@ -789,7 +867,7 @@ void main() {
       final candidates = detector.detect(kHrMaccentraleurope);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-centraleurope'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
@@ -802,7 +880,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHrUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
     });
 
@@ -814,7 +895,7 @@ void main() {
       final candidates = detector.detect(kHrWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hr'));
@@ -828,7 +909,7 @@ void main() {
       final candidates = detector.detect(kHuIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hu'));
@@ -841,7 +922,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kHuUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('hu'));
     });
 
@@ -853,7 +937,7 @@ void main() {
       final candidates = detector.detect(kHuWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('hu'));
@@ -867,7 +951,7 @@ void main() {
       final candidates = detector.detect(kItIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('it'));
@@ -880,7 +964,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kItUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('it'));
     });
 
@@ -891,7 +978,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kJaEucjp);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('euc-jp'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('euc-jp'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ja'));
     });
 
@@ -903,7 +993,7 @@ void main() {
       final candidates = detector.detect(kJaIso2022jp);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-2022-jp'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ja'));
@@ -916,7 +1006,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kJaShiftjis);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('shift_jis'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('shift_jis'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ja'));
     });
 
@@ -927,7 +1020,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kJaUtf16be);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-16be'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-16be'),
+      );
     });
 
     test('detect ja utf-16le', () {
@@ -937,7 +1033,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kJaUtf16le);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-16le'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-16le'),
+      );
     });
 
     test('detect ja utf-8', () {
@@ -947,7 +1046,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kJaUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ja'));
     });
 
@@ -959,7 +1061,7 @@ void main() {
       final candidates = detector.detect(kKaGeorgianacademy);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('georgian-academy'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ka'));
@@ -973,7 +1075,7 @@ void main() {
       final candidates = detector.detect(kKaGeorgianps);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('georgian-ps'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ka'));
@@ -986,7 +1088,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kKaUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ka'));
     });
 
@@ -998,7 +1103,7 @@ void main() {
       final candidates = detector.detect(kKoIso2022kr);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-2022-kr'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ko'));
@@ -1011,18 +1116,24 @@ void main() {
       // dart format on
       final candidates = detector.detect(kKoJohab);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('johab'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('johab'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ko'));
     });
 
     test('detect ko uhc', () {
       final detector = UCharDet();
       // dart format off
-      final kKoUhc = Uint8List.fromList([0x3c, 0x53, 0x41, 0x4d, 0x49, 0x3e, 0x0d, 0x0a, 0x3c, 0x48, 0x45, 0x41, 0x44, 0x3e, 0x0d, 0x0a, 0x3c, 0x54, 0x49, 0x54, 0x4c, 0x45, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x2e, 0x73, 0x6d, 0x69, 0x3c, 0x2f, 0x54, 0x49, 0x54, 0x4c, 0x45, 0x3e, 0x0d, 0x0a, 0x3c, 0x53, 0x54, 0x59, 0x4c, 0x45, 0x20, 0x54, 0x59, 0x50, 0x45, 0x3d, 0x22, 0x74, 0x65, 0x78, 0x74, 0x2f, 0x63, 0x73, 0x73, 0x22, 0x3e, 0x0d, 0x0a, 0x3c, 0x2f, 0x53, 0x54, 0x59, 0x4c, 0x45, 0x3e, 0x0d, 0x0a, 0x3c, 0x2f, 0x48, 0x45, 0x41, 0x44, 0x3e, 0x0d, 0x0a, 0x3c, 0x42, 0x4f, 0x44, 0x59, 0x3e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x30, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x31, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xc0, 0xba, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xbf, 0xcd, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x33, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xb4, 0xc2, 0x20, 0x38, 0xba, 0xf1, 0xc6, 0xae, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xb8, 0xb7, 0xce, 0x2c, 0x20, 0x45, 0x55, 0x43, 0xc0, 0xc7, 0x20, 0xc0, 0xcf, 0xc1, 0xbe, 0xc0, 0xcc, 0xb8, 0xe7, 0x20, 0xb4, 0xeb, 0xc7, 0xa5, 0xc0, 0xfb, 0xc0, 0xce, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0x20, 0xbf, 0xcf, 0xbc, 0xba, 0xc7, 0xfc, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xcc, 0xb1, 0xe2, 0x20, 0xb6, 0xa7, 0xb9, 0xae, 0xbf, 0xa1, 0x20, 0xba, 0xb8, 0xc5, 0xeb, 0x20, 0xbf, 0xcf, 0xbc, 0xba, 0xc7, 0xfc, 0xc0, 0xcc, 0xb6, 0xf3, 0xb0, 0xed, 0x20, 0xba, 0xd2, 0xb8, 0xb0, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x32, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xba, 0x20, 0xb4, 0xd9, 0xc0, 0xbd, 0xb0, 0xfa, 0x20, 0xb0, 0xb0, 0xc0, 0xcc, 0x20, 0xb1, 0xb8, 0xbc, 0xba, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x33, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x31, 0x32, 0x38, 0xba, 0xb8, 0xb4, 0xd9, 0x20, 0xc0, 0xdb, 0xc0, 0xba, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xbf, 0xa1, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x33, 0xc0, 0xbb, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x34, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x31, 0x32, 0x38, 0xba, 0xb8, 0xb4, 0xd9, 0x20, 0xc5, 0xa9, 0xb0, 0xc5, 0xb3, 0xaa, 0x20, 0xb0, 0xb0, 0xc0, 0xba, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xbf, 0xa1, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xc0, 0xbb, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x20, 0xb0, 0xa2, 0x20, 0xb1, 0xdb, 0xc0, 0xda, 0xb4, 0xc2, 0x20, 0xc7, 0xe0, 0xb0, 0xfa, 0x20, 0xbf, 0xad, 0xbf, 0xa1, 0x20, 0x31, 0x32, 0x38, 0xc0, 0xbb, 0x20, 0xb4, 0xf5, 0xc7, 0xd1, 0x20, 0xc4, 0xda, 0xb5, 0xe5, 0xb0, 0xaa, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0x32, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xb7, 0xce, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x35, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0xb5, 0xfb, 0xb6, 0xf3, 0xbc, 0xad, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xc0, 0xc7, 0x20, 0x34, 0x30, 0x2d, 0x32, 0x37, 0xbf, 0xa1, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xb5, 0xc8, 0x20, 0x22, 0xc0, 0xa7, 0x22, 0xb6, 0xf3, 0xb4, 0xc2, 0x20, 0xb1, 0xdb, 0xc0, 0xda, 0xb4, 0xc2, 0x20, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xbf, 0xa1, 0xbc, 0xad, 0x20, 0x43, 0x30, 0x20, 0x41, 0x37, 0xb6, 0xf3, 0xb4, 0xc2, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0x20, 0xbf, 0xad, 0xb7, 0xce, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x36, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xbf, 0xa1, 0xb4, 0xc2, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0x20, 0xc3, 0xa4, 0xbf, 0xf2, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0xb8, 0xa6, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0xb1, 0xd4, 0xb0, 0xdd, 0xc0, 0xc7, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0x20, 0xc1, 0xfd, 0xc7, 0xd5, 0xbf, 0xa1, 0x20, 0xc6, 0xf7, 0xc7, 0xd4, 0xb5, 0xc7, 0xc1, 0xf6, 0x20, 0xbe, 0xca, 0xc0, 0xba, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0xc0, 0xbb, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xc7, 0xcf, 0xb4, 0xc2, 0x20, 0xc8, 0xae, 0xc0, 0xe5, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xcc, 0x20, 0xc0, 0xd6, 0xc1, 0xf6, 0xb8, 0xb8, 0x2c, 0x20, 0xb4, 0xeb, 0xba, 0xce, 0xba, 0xd0, 0xc0, 0xc7, 0x20, 0xb0, 0xe6, 0xbf, 0xec, 0x20, 0xc0, 0xcc, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xba, 0x20, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xbf, 0xa1, 0xbc, 0xad, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xb5, 0xc7, 0xc1, 0xf6, 0x20, 0xbe, 0xca, 0xb0, 0xed, 0x20, 0xb4, 0xeb, 0xbd, 0xc5, 0x20, 0x43, 0x50, 0x39, 0x34, 0x39, 0xbf, 0xcd, 0x20, 0xb0, 0xb0, 0xc0, 0xba, 0x20, 0xb4, 0xd9, 0xb8, 0xa5, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0x20, 0xb9, 0xd9, 0xb1, 0xf9, 0xc0, 0xc7, 0x20, 0xc7, 0xf6, 0xb4, 0xeb, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0xc0, 0xbb, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x0d, 0x0a, 0x3c, 0x2f, 0x42, 0x4f, 0x44, 0x59, 0x3e, 0x0d, 0x0a, 0x3c, 0x2f, 0x53, 0x41, 0x4d, 0x49, 0x3e, 0x0d, 0x0a]);
+      final kKoUhc = Uint8List.fromList([0x3c, 0x53, 0x41, 0x4d, 0x49, 0x3e, 0x0a, 0x3c, 0x48, 0x45, 0x41, 0x44, 0x3e, 0x0a, 0x3c, 0x54, 0x49, 0x54, 0x4c, 0x45, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x2e, 0x73, 0x6d, 0x69, 0x3c, 0x2f, 0x54, 0x49, 0x54, 0x4c, 0x45, 0x3e, 0x0a, 0x3c, 0x53, 0x54, 0x59, 0x4c, 0x45, 0x20, 0x54, 0x59, 0x50, 0x45, 0x3d, 0x22, 0x74, 0x65, 0x78, 0x74, 0x2f, 0x63, 0x73, 0x73, 0x22, 0x3e, 0x0a, 0x3c, 0x2f, 0x53, 0x54, 0x59, 0x4c, 0x45, 0x3e, 0x0a, 0x3c, 0x2f, 0x48, 0x45, 0x41, 0x44, 0x3e, 0x0a, 0x3c, 0x42, 0x4f, 0x44, 0x59, 0x3e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x30, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x31, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xc0, 0xba, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xbf, 0xcd, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x33, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xb4, 0xc2, 0x20, 0x38, 0xba, 0xf1, 0xc6, 0xae, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xb8, 0xb7, 0xce, 0x2c, 0x20, 0x45, 0x55, 0x43, 0xc0, 0xc7, 0x20, 0xc0, 0xcf, 0xc1, 0xbe, 0xc0, 0xcc, 0xb8, 0xe7, 0x20, 0xb4, 0xeb, 0xc7, 0xa5, 0xc0, 0xfb, 0xc0, 0xce, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0x20, 0xbf, 0xcf, 0xbc, 0xba, 0xc7, 0xfc, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xcc, 0xb1, 0xe2, 0x20, 0xb6, 0xa7, 0xb9, 0xae, 0xbf, 0xa1, 0x20, 0xba, 0xb8, 0xc5, 0xeb, 0x20, 0xbf, 0xcf, 0xbc, 0xba, 0xc7, 0xfc, 0xc0, 0xcc, 0xb6, 0xf3, 0xb0, 0xed, 0x20, 0xba, 0xd2, 0xb8, 0xb0, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x32, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0x20, 0xc0, 0xce, 0xc4, 0xda, 0xb5, 0xf9, 0xc0, 0xba, 0x20, 0xb4, 0xd9, 0xc0, 0xbd, 0xb0, 0xfa, 0x20, 0xb0, 0xb0, 0xc0, 0xcc, 0x20, 0xb1, 0xb8, 0xbc, 0xba, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x33, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x31, 0x32, 0x38, 0xba, 0xb8, 0xb4, 0xd9, 0x20, 0xc0, 0xdb, 0xc0, 0xba, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xbf, 0xa1, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x33, 0xc0, 0xbb, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x34, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x31, 0x32, 0x38, 0xba, 0xb8, 0xb4, 0xd9, 0x20, 0xc5, 0xa9, 0xb0, 0xc5, 0xb3, 0xaa, 0x20, 0xb0, 0xb0, 0xc0, 0xba, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xbf, 0xa1, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xc0, 0xbb, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x20, 0xb0, 0xa2, 0x20, 0xb1, 0xdb, 0xc0, 0xda, 0xb4, 0xc2, 0x20, 0xc7, 0xe0, 0xb0, 0xfa, 0x20, 0xbf, 0xad, 0xbf, 0xa1, 0x20, 0x31, 0x32, 0x38, 0xc0, 0xbb, 0x20, 0xb4, 0xf5, 0xc7, 0xd1, 0x20, 0xc4, 0xda, 0xb5, 0xe5, 0xb0, 0xaa, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0x32, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0xb7, 0xce, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x35, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0xb5, 0xfb, 0xb6, 0xf3, 0xbc, 0xad, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xc0, 0xc7, 0x20, 0x34, 0x30, 0x2d, 0x32, 0x37, 0xbf, 0xa1, 0x20, 0xb9, 0xe8, 0xb4, 0xe7, 0xb5, 0xc8, 0x20, 0x22, 0xc0, 0xa7, 0x22, 0xb6, 0xf3, 0xb4, 0xc2, 0x20, 0xb1, 0xdb, 0xc0, 0xda, 0xb4, 0xc2, 0x20, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xbf, 0xa1, 0xbc, 0xad, 0x20, 0x43, 0x30, 0x20, 0x41, 0x37, 0xb6, 0xf3, 0xb4, 0xc2, 0x20, 0xb9, 0xd9, 0xc0, 0xcc, 0xc6, 0xae, 0x20, 0xbf, 0xad, 0xb7, 0xce, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xb5, 0xc8, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x53, 0x59, 0x4e, 0x43, 0x20, 0x53, 0x74, 0x61, 0x72, 0x74, 0x3d, 0x36, 0x30, 0x30, 0x30, 0x3e, 0x3c, 0x50, 0x3e, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0xbf, 0xa1, 0xb4, 0xc2, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0x20, 0xc3, 0xa4, 0xbf, 0xf2, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0xb8, 0xa6, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0xb1, 0xd4, 0xb0, 0xdd, 0xc0, 0xc7, 0x20, 0xb9, 0xae, 0xc0, 0xda, 0x20, 0xc1, 0xfd, 0xc7, 0xd5, 0xbf, 0xa1, 0x20, 0xc6, 0xf7, 0xc7, 0xd4, 0xb5, 0xc7, 0xc1, 0xf6, 0x20, 0xbe, 0xca, 0xc0, 0xba, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0xc0, 0xbb, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xc7, 0xcf, 0xb4, 0xc2, 0x20, 0xc8, 0xae, 0xc0, 0xe5, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xcc, 0x20, 0xc0, 0xd6, 0xc1, 0xf6, 0xb8, 0xb8, 0x2c, 0x20, 0xb4, 0xeb, 0xba, 0xce, 0xba, 0xd0, 0xc0, 0xc7, 0x20, 0xb0, 0xe6, 0xbf, 0xec, 0x20, 0xc0, 0xcc, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xba, 0x20, 0x45, 0x55, 0x43, 0x2d, 0x4b, 0x52, 0xbf, 0xa1, 0xbc, 0xad, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xb5, 0xc7, 0xc1, 0xf6, 0x20, 0xbe, 0xca, 0xb0, 0xed, 0x20, 0xb4, 0xeb, 0xbd, 0xc5, 0x20, 0x43, 0x50, 0x39, 0x34, 0x39, 0xbf, 0xcd, 0x20, 0xb0, 0xb0, 0xc0, 0xba, 0x20, 0xb4, 0xd9, 0xb8, 0xa5, 0x20, 0xb9, 0xe6, 0xb9, 0xfd, 0xc0, 0xbb, 0x20, 0xbb, 0xe7, 0xbf, 0xeb, 0xc7, 0xcf, 0xbf, 0xa9, 0x20, 0x4b, 0x53, 0x20, 0x58, 0x20, 0x31, 0x30, 0x30, 0x31, 0x20, 0xb9, 0xd9, 0xb1, 0xf9, 0xc0, 0xc7, 0x20, 0xc7, 0xf6, 0xb4, 0xeb, 0x20, 0xc7, 0xd1, 0xb1, 0xdb, 0xc0, 0xbb, 0x20, 0xc7, 0xa5, 0xc7, 0xf6, 0xc7, 0xd1, 0xb4, 0xd9, 0x2e, 0x0a, 0x3c, 0x2f, 0x42, 0x4f, 0x44, 0x59, 0x3e, 0x0a, 0x3c, 0x2f, 0x53, 0x41, 0x4d, 0x49, 0x3e, 0x0a]);
       // dart format on
       final candidates = detector.detect(kKoUhc);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('uhc'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('uhc'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ko'));
     });
 
@@ -1033,7 +1144,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kKoUtf16le);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-16le'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-16le'),
+      );
     });
 
     test('detect ko utf-32be', () {
@@ -1043,7 +1157,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kKoUtf32be);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-32be'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-32be'),
+      );
     });
 
     test('detect ko utf-8', () {
@@ -1053,7 +1170,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kKoUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ko'));
     });
 
@@ -1065,7 +1185,7 @@ void main() {
       final candidates = detector.detect(kLtIso885910);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-10'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lt'));
@@ -1079,7 +1199,7 @@ void main() {
       final candidates = detector.detect(kLtIso885913);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-13'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lt'));
@@ -1093,7 +1213,7 @@ void main() {
       final candidates = detector.detect(kLtIso88594);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-4'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lt'));
@@ -1106,7 +1226,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kLtUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('lt'));
     });
 
@@ -1118,7 +1241,7 @@ void main() {
       final candidates = detector.detect(kLvIso885910);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-10'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lv'));
@@ -1132,7 +1255,7 @@ void main() {
       final candidates = detector.detect(kLvIso885913);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-13'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lv'));
@@ -1146,7 +1269,7 @@ void main() {
       final candidates = detector.detect(kLvIso88594);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-4'),
       );
       expect(candidates.first.language?.iso6391Code, equals('lv'));
@@ -1159,7 +1282,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kLvUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('lv'));
     });
 
@@ -1170,7 +1296,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kMkIbm855);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm855'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm855'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('mk'));
     });
 
@@ -1182,7 +1311,7 @@ void main() {
       final candidates = detector.detect(kMkIso88595);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-5'),
       );
       expect(candidates.first.language?.iso6391Code, equals('mk'));
@@ -1195,7 +1324,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kMkUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('mk'));
     });
 
@@ -1207,7 +1339,7 @@ void main() {
       final candidates = detector.detect(kMkWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('mk'));
@@ -1221,7 +1353,7 @@ void main() {
       final candidates = detector.detect(kMtIso88593);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-3'),
       );
       expect(candidates.first.language?.iso6391Code, equals('mt'));
@@ -1234,7 +1366,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kMtUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('mt'));
     });
 
@@ -1245,7 +1380,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kNoIbm865);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm865'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm865'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('no'));
     });
 
@@ -1257,7 +1395,7 @@ void main() {
       final candidates = detector.detect(kNoIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('no'));
@@ -1271,7 +1409,7 @@ void main() {
       final candidates = detector.detect(kNoIso885915);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-15'),
       );
       expect(candidates.first.language?.iso6391Code, equals('no'));
@@ -1284,7 +1422,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kNoUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('no'));
     });
 
@@ -1296,7 +1437,7 @@ void main() {
       final candidates = detector.detect(kNoWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('no'));
@@ -1309,7 +1450,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kPlIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
     });
 
@@ -1321,7 +1465,7 @@ void main() {
       final candidates = detector.detect(kPlIso885913);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-13'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
@@ -1335,7 +1479,7 @@ void main() {
       final candidates = detector.detect(kPlIso885916);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-16'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
@@ -1349,7 +1493,7 @@ void main() {
       final candidates = detector.detect(kPlIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
@@ -1363,7 +1507,7 @@ void main() {
       final candidates = detector.detect(kPlMaccentraleurope);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-centraleurope'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
@@ -1376,7 +1520,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kPlUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
     });
 
@@ -1388,7 +1535,7 @@ void main() {
       final candidates = detector.detect(kPlWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pl'));
@@ -1402,7 +1549,7 @@ void main() {
       final candidates = detector.detect(kPtIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('pt'));
@@ -1415,7 +1562,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kPtUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('pt'));
     });
 
@@ -1426,7 +1576,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRoIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ro'));
     });
 
@@ -1438,7 +1591,7 @@ void main() {
       final candidates = detector.detect(kRoIso885916);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-16'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ro'));
@@ -1451,7 +1604,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRoUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ro'));
     });
 
@@ -1463,7 +1619,7 @@ void main() {
       final candidates = detector.detect(kRoWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ro'));
@@ -1476,7 +1632,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRuIbm855);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm855'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm855'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
     });
 
@@ -1487,7 +1646,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRuIbm866);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm866'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm866'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
     });
 
@@ -1499,7 +1661,7 @@ void main() {
       final candidates = detector.detect(kRuIso88595);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-5'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
@@ -1512,7 +1674,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRuKoi8r);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('koi8-r'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('koi8-r'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
     });
 
@@ -1524,7 +1689,7 @@ void main() {
       final candidates = detector.detect(kRuMaccyrillic);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-cyrillic'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
@@ -1537,7 +1702,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kRuUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
     });
 
@@ -1549,7 +1717,7 @@ void main() {
       final candidates = detector.detect(kRuWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('ru'));
@@ -1562,7 +1730,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSkIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sk'));
     });
 
@@ -1574,7 +1745,7 @@ void main() {
       final candidates = detector.detect(kSkIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sk'));
@@ -1588,7 +1759,7 @@ void main() {
       final candidates = detector.detect(kSkMaccentraleurope);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-centraleurope'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sk'));
@@ -1601,7 +1772,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSkUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sk'));
     });
 
@@ -1613,7 +1787,7 @@ void main() {
       final candidates = detector.detect(kSkWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sk'));
@@ -1626,7 +1800,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSlIbm852);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('ibm852'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('ibm852'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
     });
 
@@ -1638,7 +1815,7 @@ void main() {
       final candidates = detector.detect(kSlIso885916);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-16'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
@@ -1652,7 +1829,7 @@ void main() {
       final candidates = detector.detect(kSlIso88592);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-2'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
@@ -1666,7 +1843,7 @@ void main() {
       final candidates = detector.detect(kSlMaccentraleurope);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('mac-centraleurope'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
@@ -1679,7 +1856,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSlUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
     });
 
@@ -1691,7 +1871,7 @@ void main() {
       final candidates = detector.detect(kSlWindows1250);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1250'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sl'));
@@ -1705,7 +1885,7 @@ void main() {
       final candidates = detector.detect(kSrIso88595);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-5'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sr'));
@@ -1718,7 +1898,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSrUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sr'));
     });
 
@@ -1730,7 +1913,7 @@ void main() {
       final candidates = detector.detect(kSrWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sr'));
@@ -1744,7 +1927,7 @@ void main() {
       final candidates = detector.detect(kSvIso88591);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-1'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sv'));
@@ -1757,7 +1940,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kSvUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('sv'));
     });
 
@@ -1769,7 +1955,7 @@ void main() {
       final candidates = detector.detect(kSvWindows1252);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1252'),
       );
       expect(candidates.first.language?.iso6391Code, equals('sv'));
@@ -1783,7 +1969,7 @@ void main() {
       final candidates = detector.detect(kThIso885911);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-11'),
       );
       expect(candidates.first.language?.iso6391Code, equals('th'));
@@ -1796,7 +1982,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kThTis620);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('tis-620'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('tis-620'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('th'));
     });
 
@@ -1807,7 +1996,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kThUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('th'));
     });
 
@@ -1819,7 +2011,7 @@ void main() {
       final candidates = detector.detect(kTrIso88593);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-3'),
       );
       expect(candidates.first.language?.iso6391Code, equals('tr'));
@@ -1833,7 +2025,7 @@ void main() {
       final candidates = detector.detect(kTrIso88599);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('iso-8859-9'),
       );
       expect(candidates.first.language?.iso6391Code, equals('tr'));
@@ -1846,7 +2038,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kTrUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('tr'));
     });
 
@@ -1857,7 +2052,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kUkUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('uk'));
     });
 
@@ -1869,7 +2067,7 @@ void main() {
       final candidates = detector.detect(kUkWindows1251);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1251'),
       );
       expect(candidates.first.language?.iso6391Code, equals('uk'));
@@ -1882,7 +2080,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kViUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('vi'));
     });
 
@@ -1893,7 +2094,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kViViscii);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('viscii'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('viscii'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('vi'));
     });
 
@@ -1905,7 +2109,7 @@ void main() {
       final candidates = detector.detect(kViWindows1258);
       expect(candidates.isNotEmpty, isTrue);
       expect(
-        candidates.first.encoding.name.toLowerCase(),
+        candidates.first.encoding.displayName.toLowerCase(),
         equals('windows-1258'),
       );
       expect(candidates.first.language?.iso6391Code, equals('vi'));
@@ -1918,7 +2122,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kZhBig5);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('big5'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('big5'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('zh'));
     });
 
@@ -1929,7 +2136,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kZhEuctw);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('euc-tw'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('euc-tw'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('zh'));
     });
 
@@ -1940,7 +2150,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kZhGb18030);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('gb18030'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('gb18030'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('zh'));
     });
 
@@ -1951,7 +2164,10 @@ void main() {
       // dart format on
       final candidates = detector.detect(kZhUtf8);
       expect(candidates.isNotEmpty, isTrue);
-      expect(candidates.first.encoding.name.toLowerCase(), equals('utf-8'));
+      expect(
+        candidates.first.encoding.displayName.toLowerCase(),
+        equals('utf-8'),
+      );
       expect(candidates.first.language?.iso6391Code, equals('zh'));
     });
   });

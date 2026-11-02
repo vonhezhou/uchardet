@@ -92,6 +92,7 @@ class GB18030Prober extends CharSetProber {
 
   @override
   ProberState feed(Uint8List aBuf) {
+    if (aBuf.isEmpty) return mState;
     var codingState = 0;
     for (var i = 0; i < aBuf.length; i++) {
       codingState = _mCodingSM.nextState(aBuf[i]);
@@ -103,7 +104,9 @@ class GB18030Prober extends CharSetProber {
       if (codingState == eStart) {
         var charLen = _mCodingSM.currentCharLen;
 
-        if (i == 0) {
+        if (charLen != 2) {
+          continue;
+        } else if (i == 0) {
           _mLastChar[1] = aBuf[0];
           _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
         } else {

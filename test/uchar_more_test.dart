@@ -70,11 +70,13 @@ void main() {
       expect(candidates.isEmpty, isTrue);
     });
 
-    test('uchardet detect invalid data', () {
+    test('non-UTF8 bytes can still match a legacy encoding', () {
       final detector = UCharDet();
       final buffer = Uint8List.fromList([0xff, 0xff, 0xff, 0xff, 0xff, 0x01]);
       final candidates = detector.detect(buffer);
-      expect(candidates.isEmpty, isTrue);
+      // 上游将此输入判为 WINDOWS-1251；编码探测不等同于文本合法性校验。
+      expect(candidates.first.encoding, Encoding.windows1251);
+      expect(candidates.first.language, Language.russian);
     });
   });
 }

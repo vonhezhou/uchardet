@@ -91,6 +91,7 @@ class EUCJPProber extends CharSetProber {
 
   @override
   ProberState feed(Uint8List aBuf) {
+    if (aBuf.isEmpty) return mState;
     int codingState = 0;
     for (var ii = 0; ii < aBuf.length; ii++) {
       codingState = _mCodingSM.nextState(aBuf[ii]);
@@ -101,7 +102,9 @@ class EUCJPProber extends CharSetProber {
 
       if (codingState == eStart) {
         var charLen = _mCodingSM.currentCharLen;
-        if (ii == 0) {
+        if (charLen != 2) {
+          _mContextAnalyser.feedOneChar(Uint8List(0));
+        } else if (ii == 0) {
           _mLastChar[1] = aBuf[0];
           _mContextAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));
           _mDistributionAnalyser.feedOneChar(_mLastChar.sublist(0, charLen));

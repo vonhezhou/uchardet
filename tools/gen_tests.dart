@@ -26,7 +26,9 @@ String generateTestCode(Directory dir) {
   testCode.writeln('  group(\'uchardet\', () {');
   testCode.writeln('    setUp(() {});');
 
-  for (var entity in dir.listSync(recursive: true)) {
+  final entities = dir.listSync(recursive: true)
+    ..sort((a, b) => a.path.compareTo(b.path));
+  for (var entity in entities) {
     if (entity is! File) {
       continue;
     }
@@ -45,9 +47,7 @@ String generateTestCode(Directory dir) {
 
     testCode.writeln();
     testCode.writeln('    test(\'detect $languageCode $encodingName\', () {');
-    testCode.writeln(
-      '      final detector = UCharDet();',
-    );
+    testCode.writeln('      final detector = UCharDet();');
 
     final content = file.readAsBytesSync();
     final hexList = content
@@ -62,7 +62,7 @@ String generateTestCode(Directory dir) {
     testCode.writeln('      final candidates = detector.detect($argName);');
     testCode.writeln('      expect(candidates.isNotEmpty, isTrue);');
     testCode.writeln(
-      "      expect(candidates.first.encoding.name.toLowerCase(), equals('${encodingName.toLowerCase()}'));",
+      "      expect(candidates.first.encoding.displayName.toLowerCase(), equals('${encodingName.toLowerCase()}'));",
     );
 
     // for these encoding, languane is not reliably detected
@@ -90,7 +90,7 @@ String removeSuffix(String input) {
 /// removing all non-alphanumeric characters
 String toPascalCase(String input) {
   final regex = RegExp(r'[^a-zA-Z0-9]');
-  final newInput = input.replaceAll(regex, ''); 
+  final newInput = input.replaceAll(regex, '');
   final words = newInput.split(' ');
   final capitalizedWords = words.map((word) {
     if (word.isEmpty) return '';

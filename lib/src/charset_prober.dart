@@ -68,7 +68,6 @@ abstract class CharSetProber {
   ProberState feed(Uint8List buf);
   void close() {}
 
-  @mustBeOverridden
   List<CharSetCandidate> getCandidates();
 
   bool decodeToUnicode() => false;

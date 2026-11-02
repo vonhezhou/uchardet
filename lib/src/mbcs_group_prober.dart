@@ -42,6 +42,7 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import './base/ascii_utils.dart';
 import './big5_prober.dart';
 import './charset_prober.dart';
 import './eucjp_prober.dart';
@@ -61,6 +62,7 @@ class MBCSGroupProber extends CharSetProber {
 
   @protected
   int _mActiveNum = 0;
+  int _mKeepNext = 0;
 
   @protected
   final List<CharSetCandidate> _mCandidates = [];
@@ -79,6 +81,7 @@ class MBCSGroupProber extends CharSetProber {
       ii.reset();
     }
     _mActiveNum = _mProbers.length;
+    _mKeepNext = 0;
     _mCandidates.clear();
 
     super.reset();
@@ -86,6 +89,31 @@ class MBCSGroupProber extends CharSetProber {
 
   @override
   ProberState feed(Uint8List aBuf) {
+    var start = 0;
+    var keepNext = _mKeepNext;
+    final utf8Prober = _mProbers.first as UTF8Prober;
+    // 与上游一致：保留高位字节及其后的两个 ASCII，其他 ASCII 仅用于语言统计。
+    for (var pos = 0; pos < aBuf.length; pos++) {
+      if (isNonAsciiHighByte(aBuf[pos])) {
+        if (keepNext == 0) start = pos;
+        keepNext = 2;
+      } else if (keepNext != 0) {
+        if (--keepNext == 0) {
+          _feedProbers(Uint8List.sublistView(aBuf, start, pos + 1));
+          if (mState == ProberState.foundIt) return mState;
+        }
+      } else {
+        utf8Prober.feedCodePoint(aBuf[pos]);
+      }
+    }
+    if (keepNext != 0) {
+      _feedProbers(Uint8List.sublistView(aBuf, start));
+    }
+    _mKeepNext = keepNext;
+    return mState;
+  }
+
+  void _feedProbers(Uint8List aBuf) {
     for (var ii in _mProbers) {
       if (!ii.mActive) {
         continue;
@@ -108,8 +136,6 @@ class MBCSGroupProber extends CharSetProber {
         }
       }
     }
-
-    return mState;
   }
 
   @override
@@ -129,9 +155,11 @@ class MBCSGroupProber extends CharSetProber {
             continue;
           }
 
-          var newList = ii.getCandidates();
-          newList.removeWhere((c) => c.confidence < _kCandidateThreshold);
-          _mCandidates.addAll(newList);
+          _mCandidates.addAll(
+            ii.getCandidates().where(
+              (c) => c.confidence > _kCandidateThreshold,
+            ),
+          );
         }
         _mCandidates.sort((a, b) => b.confidence.compareTo(a.confidence));
     }

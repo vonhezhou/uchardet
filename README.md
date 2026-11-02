@@ -63,9 +63,46 @@ void printAllCanditates(List<CharSetCandidate> candidates) {
 
 ```
 
+## Language weights
+
+Language weights provide the functionality of upstream `uchardet_weigh_language`
+and `uchardet_set_default_weight`. They adjust candidate confidence and ranking
+without changing which probers run or the minimum-confidence filtering.
+
+```dart
+final detector = UCharDet();
+detector.setDefaultWeight(0.5);
+detector.weighLanguage(Language.french, 2.0);
+final candidates = detector.detect(bytes);
+
+// 已有结果也可立即按新权重重新排序。
+detector.weighLanguage(Language.french, 1.0);
+print(detector.candidates);
+```
+
+Weights default to `1.0` and must be finite, non-negative numbers. An explicit
+language weight replaces the default weight for that language; candidates with
+no language use the default. The reported confidence is the original confidence
+multiplied by the weight, so it can exceed `1.0`. A zero weight keeps the candidate
+with confidence `0.0`. Changing weights recalculates from the original confidence,
+without accumulating multipliers. Both `reset()` and `detect()` retain weights.
+Unlike the pinned C++ version, the default weight also takes effect when no
+per-language weight has been set.
+
+To regenerate the sample tests:
+
+```sh
+dart run tools/gen_tests.dart
+dart format test/uchardet_test.dart
+```
+
 ## Additional information
 
 - the detection is NOT 100% accurate
+- inherited single-byte filtering heuristics can produce different results for
+  different chunk boundaries; use one buffer when consistent results are required
+- the sample fixtures adapt the pinned upstream corpus: Japanese UTF-16 samples
+  have BOMs added, and the GB18030 and UHC samples differ from the upstream files
 - certain encodings, e.g. utf-16, will not detect languange
 - utf-16/utf-32 without BOM will NOT be detected
 - base on the code on [uchardet](https://gitlab.freedesktop.org/uchardet/uchardet), commit id: edae8e81cfb8092496f94da1a306c4c9f0ce32bb

@@ -36,7 +36,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-import "dart:math";
 import 'dart:typed_data';
 
 import "./charset_prober.dart";
@@ -83,11 +82,8 @@ import "./lang_models/lang_vietnamese_model.dart";
 import './language_detector.dart';
 import './mbcs_sm_model.dart';
 import './types.dart';
-import "base/ascii_utils.dart";
 
 class UTF8Prober extends CharSetProber {
-  static const _kMaxCodePointBufferSize = 1024;
-
   static const _kCandidateThreshold = 0.3;
 
   final CodingStateMachine _mCodingSM;
@@ -98,8 +94,6 @@ class UTF8Prober extends CharSetProber {
   final List<int> _mCodePointBuffer = [];
 
   final List<LanguageDetector> _mLangDetectors = [];
-
-  int _mKeepNext = 0;
 
   final List<CharSetCandidate> _mCandidates = [];
 
@@ -113,6 +107,7 @@ class UTF8Prober extends CharSetProber {
 
   @override
   List<CharSetCandidate> getCandidates() {
+    _updateCandidates();
     return _mCandidates;
   }
 
@@ -126,110 +121,33 @@ class UTF8Prober extends CharSetProber {
     _mCurrentCodePoint = 0;
 
     _mCodePointBuffer.clear();
+    _mCandidates.clear();
 
     for (var jj in _mLangDetectors) {
       jj.reset();
     }
 
-    _mKeepNext = 0;
-
     super.reset();
+  }
+
+  /// 上游仅将过滤后的多字节片段送入编码状态机，其他 ASCII 仍参与语言统计。
+  void feedCodePoint(int codePoint) {
+    _mCodePointBuffer.add(codePoint);
+    if (_mCodePointBuffer.length >= 1024) {
+      _flushCodePoints();
+    }
+  }
+
+  void _flushCodePoints() {
+    if (_mCodePointBuffer.isEmpty) return;
+    for (final detector in _mLangDetectors) {
+      detector.feed(_mCodePointBuffer);
+    }
+    _mCodePointBuffer.clear();
   }
 
   @override
   ProberState feed(Uint8List aBuf) {
-    int keepNext = _mKeepNext;
-    int start = 0;
-    ProberState st = ProberState.detecting;
-    //do filtering to reduce load to probers
-    for (var pos = 0; pos < aBuf.length; ++pos) {
-      if (isNonAsciiHighByte(aBuf[pos])) {
-        if (keepNext == 0) {
-          start = pos;
-        }
-        keepNext = 2;
-      } else if (keepNext != 0) {
-        if (--keepNext == 0) {
-          var sequenceLength = pos + 1 - start;
-          if (_mCodePointBuffer.length + sequenceLength >
-              _kMaxCodePointBufferSize) {
-            for (var jj in _mLangDetectors) {
-              jj.feed(_mCodePointBuffer);
-            }
-            _mCodePointBuffer.clear();
-          }
-
-          while (sequenceLength > 0) {
-            int subLength = min(sequenceLength, _kMaxCodePointBufferSize);
-            st = _feed(aBuf.sublist(start, start + subLength));
-
-            if (_mCodePointBuffer.isNotEmpty) {
-              for (var jj in _mLangDetectors) {
-                jj.feed(_mCodePointBuffer);
-              }
-              _mCodePointBuffer.clear();
-            }
-
-            sequenceLength -= subLength;
-          }
-
-          if (st == ProberState.foundIt) {
-            double cf = _calcConfidence();
-
-            for (var jj in _mLangDetectors) {
-              double langConf = jj.getConfidence();
-
-              if (cf * langConf > _kCandidateThreshold) {
-                /* There is at least one (charset, lang) couple for
-                 * which the confidence is high enough.
-                 */
-                mState = ProberState.foundIt;
-                return mState;
-              }
-            }
-          }
-        }
-      } else {
-        if (_mCodePointBuffer.length >= _kMaxCodePointBufferSize) {
-          for (var jj in _mLangDetectors) {
-            jj.feed(_mCodePointBuffer);
-          }
-          _mCodePointBuffer.clear();
-        }
-        _mCodePointBuffer.add(aBuf[pos]);
-      }
-    }
-
-    if (keepNext != 0) {
-      st = _feed(aBuf.sublist(start));
-      if (_mCodePointBuffer.isNotEmpty) {
-        for (var jj in _mLangDetectors) {
-          jj.feed(_mCodePointBuffer);
-        }
-        _mCodePointBuffer.clear();
-      }
-
-      if (st == ProberState.foundIt) {
-        double cf = _calcConfidence();
-
-        for (var jj in _mLangDetectors) {
-          double langConf = jj.getConfidence();
-          if (cf * langConf > _kCandidateThreshold) {
-            /* There is at least one (charset, lang) couple for
-             * which the confidence is high enough.
-             */
-            mState = ProberState.foundIt;
-            return mState;
-          }
-        }
-      }
-    }
-
-    _mKeepNext = keepNext;
-    return mState;
-  }
-
-  ProberState _feed(Uint8List aBuf) {
     const enoughCharThreshold = 256;
     int codingState = 0;
     for (var i = 0; i < aBuf.length; i++) {
@@ -256,13 +174,15 @@ class UTF8Prober extends CharSetProber {
           _mCurrentCodePoint = 0xff & aBuf[i];
         }
 
-        _mCodePointBuffer.add(_mCurrentCodePoint);
+        feedCodePoint(_mCurrentCodePoint);
         _mCurrentCodePoint = 0;
       } else {
         _mCurrentCodePoint =
             ((0xff & aBuf[i]) & 0x3f) | (_mCurrentCodePoint << 6);
       }
     }
+
+    _flushCodePoints();
 
     if (mState == ProberState.detecting) {
       if (_mNumOfMBChar > enoughCharThreshold &&
@@ -275,26 +195,25 @@ class UTF8Prober extends CharSetProber {
 
   @override
   void close() {
-    double cf = _calcConfidence();
-    for (var jj in _mLangDetectors) {
-      /* Process any remaining language data first. */
-      if (_mCodePointBuffer.isNotEmpty) {
-        jj.feed(_mCodePointBuffer);
-      }
+    _updateCandidates();
+  }
 
-      /* Now check the confidence in this (charset, lang) couple. */
-      double langConf = jj.getConfidence();
-      if ((cf * langConf > _kCandidateThreshold)) {
+  void _updateCandidates() {
+    _flushCodePoints();
+    _mCandidates.clear();
+    final cf = _calcConfidence();
+    for (final detector in _mLangDetectors) {
+      final confidence = cf * detector.getConfidence();
+      if (confidence > _kCandidateThreshold) {
         _mCandidates.add(
           CharSetCandidate(
             encoding: Encoding.utf8,
-            language: jj.getLanguage(),
-            confidence: cf * langConf,
+            language: detector.getLanguage(),
+            confidence: confidence,
           ),
         );
       }
     }
-    _mCodePointBuffer.clear();
   }
 
   double _calcConfidence() {

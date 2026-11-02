@@ -71,12 +71,16 @@ enum _InputState { pureAscii, escapedAscii, highByte }
 class UCharDet {
   CharSetCandidate? _mShortCircuitCandidate;
   final List<CharSetCandidate> _mCandidates = [];
+  final List<CharSetCandidate> _mRawCandidates = [];
+  final Map<Language, double> _mLanguageWeights = {};
+  double _mDefaultWeight = 1.0;
 
   _InputState _mInputState = _InputState.pureAscii;
 
   int _mLastCodeUnit = 0;
 
   final List<int> _mBomBuffer = [];
+  bool _mBomChecked = false;
 
   final UCharDetOptions _mOptions;
 
@@ -98,6 +102,51 @@ class UCharDet {
   ///  sorted by confidence the first candidate is the best one
   List<CharSetCandidate> get candidates => _mCandidates;
 
+  /// 设置指定语言的置信度权重，并立即重新排列已有候选。
+  /// 权重必须为有限非负数；0 可将该语言的排序权重降为 0。
+  /// 权重在 [reset] 和 [detect] 之间保留。
+  void weighLanguage(Language language, double weight) {
+    _validateWeight(weight);
+    _mLanguageWeights[language] = weight;
+    _updateWeightedCandidates();
+  }
+
+  /// 设置未单独指定权重的语言及未知语言候选的默认权重。
+  /// 权重仅影响最终置信度和排序，不改变探测与候选筛选过程。
+  void setDefaultWeight(double weight) {
+    _validateWeight(weight);
+    _mDefaultWeight = weight;
+    _updateWeightedCandidates();
+  }
+
+  static void _validateWeight(double weight) {
+    if (!weight.isFinite || weight < 0) {
+      throw ArgumentError.value(weight, 'weight', '必须为有限非负数');
+    }
+  }
+
+  void _updateWeightedCandidates() {
+    _mCandidates.clear();
+    for (final candidate in _mRawCandidates) {
+      final weighted = CharSetCandidate(
+        encoding: candidate.encoding,
+        language: candidate.language,
+        confidence:
+            candidate.confidence *
+            (_mLanguageWeights[candidate.language] ?? _mDefaultWeight),
+        hasBom: candidate.hasBom,
+      );
+      final index = _mCandidates.indexWhere(
+        (c) => c.confidence < weighted.confidence,
+      );
+      if (index < 0) {
+        _mCandidates.add(weighted);
+      } else {
+        _mCandidates.insert(index, weighted);
+      }
+    }
+  }
+
   /// detect the encoding of the given buffer
   List<CharSetCandidate> detect(Uint8List aBuf) {
     reset();
@@ -117,6 +166,8 @@ class UCharDet {
     _mNbspFound = false;
     _mInputState = _InputState.pureAscii;
     _mLastCodeUnit = 0;
+    _mBomBuffer.clear();
+    _mBomChecked = false;
 
     _mEscapeCharSetProber?.reset();
 
@@ -125,6 +176,7 @@ class UCharDet {
     }
 
     _mShortCircuitCandidate = null;
+    _mRawCandidates.clear();
     _mCandidates.clear();
   }
 
@@ -143,20 +195,33 @@ class UCharDet {
       return _mDone;
     }
 
-    /* If the data starts with BOM, we know it is UTF. */
-    if (_mBomBuffer.length < 4) {
-      // only cache the first 4 utf16 code points to detect BOM
-      _mBomBuffer.addAll(
-        aBuf.sublist(0, min(aBuf.length, 4 - _mBomBuffer.length)),
-      );
+    if (!_mBomChecked) {
+      // 开头字节只处理一次；保留 FF FE 的歧义，直到取得第 4 字节或结束。
+      final prefixLength = min(aBuf.length, 4 - _mBomBuffer.length);
+      _mBomBuffer.addAll(aBuf.sublist(0, prefixLength));
       _tryDetectBom();
+      if (_mShortCircuitCandidate != null) {
+        _mDone = true;
+        return true;
+      }
+      if (_mBomBuffer.length < 4) {
+        return false;
+      }
+      _mBomChecked = true;
+      return _feedData(
+        prefixLength == 4
+            ? aBuf
+            : Uint8List.fromList([
+              ..._mBomBuffer,
+              ...aBuf.sublist(prefixLength),
+            ]),
+      );
     }
 
-    if (_mShortCircuitCandidate != null) {
-      _mDone = true;
-      return true;
-    }
+    return _feedData(aBuf);
+  }
 
+  bool _feedData(Uint8List aBuf) {
     if (_mInputState != _InputState.highByte) {
       for (var ii in aBuf) {
         // We got a non-ASCII byte (high-byte)
@@ -245,14 +310,21 @@ class UCharDet {
     }
     _mIsClosed = true;
 
+    // 结束时才能确认仅有两字节的 UTF-16 BOM，或处理不足 4 字节的正文。
+    if (_mBomBuffer.isEmpty) {
+      return;
+    }
+    if (!_mBomChecked && _mShortCircuitCandidate == null) {
+      _tryDetectBom(atEnd: true);
+      _mBomChecked = true;
+      if (_mShortCircuitCandidate == null) {
+        _feedData(Uint8List.fromList(_mBomBuffer));
+      }
+    }
+
     _mEscapeCharSetProber?.close();
     for (var ii in _mCharSetProbers) {
       ii.close();
-    }
-
-    // no data ever received, don't return any candidate.
-    if (_mBomBuffer.isEmpty) {
-      return;
     }
 
     if (_mShortCircuitCandidate == null &&
@@ -300,7 +372,7 @@ class UCharDet {
 
   void _addCandidate(CharSetCandidate newCandi) {
     var needToAddCandi = true;
-    _mCandidates.removeWhere((c) {
+    _mRawCandidates.removeWhere((c) {
       if (c.encoding == newCandi.encoding && c.language == newCandi.language) {
         // already reported with higher confidence, ignore newCandi
         if (c.confidence >= newCandi.confidence) {
@@ -319,19 +391,19 @@ class UCharDet {
     }
 
     // sort by confidence, highest confidence first
-    final indexToInsert = _mCandidates.indexWhere(
+    final indexToInsert = _mRawCandidates.indexWhere(
       (c) => c.confidence < newCandi.confidence,
     );
     if (indexToInsert >= 0) {
-      _mCandidates.insert(indexToInsert, newCandi);
+      _mRawCandidates.insert(indexToInsert, newCandi);
     } else {
-      _mCandidates.add(newCandi);
+      _mRawCandidates.add(newCandi);
     }
+    _updateWeightedCandidates();
   }
 
-  void _tryDetectBom() {
-    if (_mBomBuffer.length <= 2) {
-    } else if (_mBomBuffer.startsWith([0xEF, 0xBB, 0xBF])) {
+  void _tryDetectBom({bool atEnd = false}) {
+    if (_mBomBuffer.startsWith([0xEF, 0xBB, 0xBF])) {
       /* EF BB BF: UTF-8 encoded BOM. */
       _mShortCircuitCandidate = CharSetCandidate(
         encoding: Encoding.utf8,
@@ -355,7 +427,8 @@ class UCharDet {
         confidence: 1.0,
         hasBom: true,
       );
-    } else if (_mBomBuffer.startsWith([0xFF, 0xFE])) {
+    } else if (_mBomBuffer.startsWith([0xFF, 0xFE]) &&
+        (atEnd || _mBomBuffer.length == 4)) {
       // FF FE  UTF-16, little endian BOM
       _mShortCircuitCandidate = CharSetCandidate(
         encoding: Encoding.utf16le,
