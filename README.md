@@ -105,7 +105,11 @@ dart format test/uchardet_test.dart
   have BOMs added, and the GB18030 and UHC samples differ from the upstream files
 - certain encodings, e.g. utf-16, will not detect languange
 - utf-16/utf-32 without BOM will NOT be detected
-- base on the code on [uchardet](https://gitlab.freedesktop.org/uchardet/uchardet), commit id: edae8e81cfb8092496f94da1a306c4c9f0ce32bb
+- upstream baseline: [06029ec3340cdf6bf9a6a537dafb3f39eda0560e](https://gitlab.freedesktop.org/uchardet/uchardet/-/commit/06029ec3340cdf6bf9a6a537dafb3f39eda0560e),
+  verified against official `master` on 2026-11-02. The detection core, language
+  models and test fixtures are unchanged from the original `edae8e81` baseline.
+  The newer CLI default-language-weight option is covered by `setDefaultWeight()`;
+  its file-handle and MSVC fixes do not require Dart library changes.
 
 ## Supported Languages/Encodings
 
