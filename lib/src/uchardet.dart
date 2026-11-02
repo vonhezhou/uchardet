@@ -46,6 +46,7 @@ import './escape_charset_prober.dart';
 import './mbcs_group_prober.dart';
 import './sbcs_group_prober.dart';
 import './types.dart';
+import './utf8_validator.dart';
 import 'base/ascii_utils.dart';
 
 class UCharDetOptions {
@@ -60,9 +61,21 @@ class UCharDetOptions {
   /// @default 0.2
   final double minConfidence;
 
+  /// 参与猜测的编码；null 表示不限制，空集合表示不进行编码猜测。
+  /// 与 languageFilter 同时生效。BOM 明确声明的编码始终报告，
+  /// 即使它不在集合内；调用者可据此处理编码声明与允许范围的冲突。
+  /// 检测器创建时会复制集合，后续修改原集合不会影响检测。
+  final Set<Encoding>? candidateEncodings;
+
+  /// 独立校验所有送入的原始字节是否符合严格 UTF-8，不改变候选评分。
+  /// 开启后仍需送入全文并 close()，不能因 feed() 返回 true 就停止送入。
+  final bool validateUtf8;
+
   const UCharDetOptions({
     this.languageFilter = LanguageFilter.all,
     this.minConfidence = 0.2,
+    this.candidateEncodings,
+    this.validateUtf8 = false,
   });
 }
 
@@ -83,6 +96,17 @@ class UCharDet {
   bool _mBomChecked = false;
 
   final UCharDetOptions _mOptions;
+  final Set<Encoding>? _candidateEncodings;
+  final Utf8Validator? _utf8Validator;
+
+  bool _allows(Encoding encoding) =>
+      _candidateEncodings?.contains(encoding) ?? true;
+
+  /// 独立于语言统计的 UTF-8 合法性。有效只代表送入的字节可按 UTF-8 解码，
+  /// 不证明原编码；close() 前保持 pending，发现非法序列则立即为 invalid。
+  /// 未开启 validateUtf8 时为 notChecked，reset() 会清除上次校验状态。
+  Utf8Validity get utf8Validity =>
+      _utf8Validator?.validity ?? Utf8Validity.notChecked;
 
   final List<CharSetProber> _mCharSetProbers = [];
   CharSetProber? _mEscapeCharSetProber;
@@ -94,7 +118,12 @@ class UCharDet {
   bool _mIsClosed = false;
 
   UCharDet({UCharDetOptions options = const UCharDetOptions()})
-    : _mOptions = options {
+    : _mOptions = options,
+      _candidateEncodings =
+          options.candidateEncodings == null
+              ? null
+              : Set.unmodifiable(options.candidateEncodings!),
+      _utf8Validator = options.validateUtf8 ? Utf8Validator() : null {
     reset();
   }
 
@@ -168,6 +197,7 @@ class UCharDet {
   void reset() {
     _mDone = false;
     _mIsClosed = false;
+    _utf8Validator?.reset();
 
     _mNbspFound = false;
     _mInputState = _InputState.pureAscii;
@@ -191,7 +221,12 @@ class UCharDet {
   /// @param aBuf the buffer of bytes to feed into the detector.
   /// @return true if the detector already figured out the encoding.
   /// the return value is the same with isDone.
+  /// 开启 validateUtf8 时，即使返回 true 也应继续送入剩余字节，
+  /// 最后调用 close()，才能得到全文校验结果。close() 后的输入会忽略。
   bool feed(Uint8List aBuf) {
+    if (_mIsClosed) return _mDone;
+    // 编码探测可以提前结束，合法性校验必须继续消费后续原始输入。
+    _utf8Validator?.feed(aBuf);
     if (_mDone) {
       return true;
     }
@@ -266,6 +301,7 @@ class UCharDet {
       case _InputState.escapedAscii:
         _mEscapeCharSetProber ??= EscapeCharSetProber(
           langFilter: _mOptions.languageFilter,
+          candidateEncodings: _candidateEncodings,
         );
 
         if (_mEscapeCharSetProber!.feed(aBuf) == ProberState.foundIt) {
@@ -279,13 +315,18 @@ class UCharDet {
           //start multibyte and singlebyte charset prober
           if (_mCharSetProbers.isEmpty) {
             _mCharSetProbers.add(
-              MBCSGroupProber(languageFilter: _mOptions.languageFilter),
+              MBCSGroupProber(
+                languageFilter: _mOptions.languageFilter,
+                candidateEncodings: _candidateEncodings,
+              ),
             );
 
             if (_mOptions.languageFilter.isEnabled(
               LanguageFilterType.kNonCjk,
             )) {
-              _mCharSetProbers.add(SBCSGroupProber());
+              _mCharSetProbers.add(
+                SBCSGroupProber(candidateEncodings: _candidateEncodings),
+              );
             }
 
             /* Disabling the generic WINDOWS-1252 (Latin 1) prober for now.
@@ -321,6 +362,7 @@ class UCharDet {
       return;
     }
     _mIsClosed = true;
+    _utf8Validator?.close();
 
     // 结束时才能确认仅有两字节的 UTF-16 BOM，或处理不足 4 字节的正文。
     if (_mBomBuffer.isEmpty) {
@@ -385,6 +427,8 @@ class UCharDet {
   }
 
   void _addCandidate(CharSetCandidate newCandi) {
+    // BOM 是明确声明，保留它以便调用者发现白名单冲突。
+    if (!newCandi.hasBom && !_allows(newCandi.encoding)) return;
     var needToAddCandi = true;
     _mRawCandidates.removeWhere((c) {
       if (c.encoding == newCandi.encoding && c.language == newCandi.language) {

@@ -49,26 +49,24 @@ class EscapeCharSetProber extends CharSetProber {
 
   CharSetCandidate? _mCandidate;
 
-  EscapeCharSetProber({required LanguageFilter langFilter}) {
-    if (langFilter.isEnabled(LanguageFilterType.kChineseSimplified)) {
-      _mStateMachines.add(
-        CodingStateMachine(model: EscapeSmModels.kHZGB2312Model),
-      );
-      _mStateMachines.add(
-        CodingStateMachine(model: EscapeSmModels.kISO2022CNModel),
-      );
-    }
-
-    if (langFilter.isEnabled(LanguageFilterType.kJapanese)) {
-      _mStateMachines.add(
-        CodingStateMachine(model: EscapeSmModels.kISO2022JPModel),
-      );
-    }
-
-    if (langFilter.isEnabled(LanguageFilterType.kKorean)) {
-      _mStateMachines.add(
-        CodingStateMachine(model: EscapeSmModels.kISO2022KRModel),
-      );
+  EscapeCharSetProber({
+    required LanguageFilter langFilter,
+    Set<Encoding>? candidateEncodings,
+  }) {
+    final models = [
+      if (langFilter.isEnabled(LanguageFilterType.kChineseSimplified)) ...[
+        EscapeSmModels.kHZGB2312Model,
+        EscapeSmModels.kISO2022CNModel,
+      ],
+      if (langFilter.isEnabled(LanguageFilterType.kJapanese))
+        EscapeSmModels.kISO2022JPModel,
+      if (langFilter.isEnabled(LanguageFilterType.kKorean))
+        EscapeSmModels.kISO2022KRModel,
+    ];
+    for (final model in models) {
+      if (candidateEncodings?.contains(model.encoding) ?? true) {
+        _mStateMachines.add(CodingStateMachine(model: model));
+      }
     }
 
     reset();

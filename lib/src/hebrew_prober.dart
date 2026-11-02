@@ -156,8 +156,11 @@ class HebrewProber extends CharSetProber {
 
   CharSetCandidate? _mCandidate;
 
-  HebrewProber()
-    : _mLogicalProb = SingleByteCharSetProber(
+  final Set<Encoding>? _candidateEncodings;
+
+  HebrewProber({Set<Encoding>? candidateEncodings})
+    : _candidateEncodings = candidateEncodings,
+      _mLogicalProb = SingleByteCharSetProber(
         model: Windows_1255HebrewModel,
         reversed: false,
       ),
@@ -169,11 +172,17 @@ class HebrewProber extends CharSetProber {
   }
 
   @override
-  double get confidence => _mCandidate?.confidence ?? 0.0;
+  double get confidence =>
+      _mCandidate != null &&
+              (_candidateEncodings?.contains(_mCandidate!.encoding) ?? true)
+          ? _mCandidate!.confidence
+          : 0.0;
 
   @override
   List<CharSetCandidate> getCandidates() => [
-    if (_mCandidate != null) _mCandidate!,
+    if (_mCandidate != null &&
+        (_candidateEncodings?.contains(_mCandidate!.encoding) ?? true))
+      _mCandidate!,
   ];
 
   /// feed

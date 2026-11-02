@@ -1,5 +1,10 @@
 ## Unreleased
 
+- Add an opt-in encoding allowlist applied before prober competition, preserving
+  explicit BOM declarations even when they conflict with the allowlist.
+- Add independent, opt-in strict UTF-8 validation across all submitted chunks,
+  including bytes received after encoding detection completes.
+
 - Reduce multibyte slicing, filter-buffer and candidate allocations; share ASCII
   model lookups and batch candidate weighting without changing detection results.
 - Add VM/AOT/JavaScript benchmarks, allocation profiling and full-result snapshots.

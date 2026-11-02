@@ -400,3 +400,18 @@ class CharSetCandidate {
     this.hasBom = false,
   });
 }
+
+/// 严格 UTF-8 校验状态，与语言模型的置信度无关。
+enum Utf8Validity {
+  /// 未开启校验。
+  notChecked,
+
+  /// 输入尚未结束；完整或不完整的合法前缀均保持此状态。
+  pending,
+
+  /// 已结束，所有送入的字节构成合法 UTF-8（包括空输入）。
+  valid,
+
+  /// 已发现非法序列，或结束时仍有未完成的字符。
+  invalid,
+}

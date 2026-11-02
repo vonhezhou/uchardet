@@ -63,6 +63,69 @@ void printAllCanditates(List<CharSetCandidate> candidates) {
 
 ```
 
+## Candidate encodings and UTF-8 validation
+
+Both options are opt-in; existing detection results remain unchanged when they
+are omitted.
+
+```dart
+final detector = UCharDet(
+  options: const UCharDetOptions(
+    candidateEncodings: {
+      Encoding.ascii,
+      Encoding.utf8,
+      Encoding.gb18030,
+      Encoding.big5,
+    },
+    validateUtf8: true,
+  ),
+);
+final candidates = detector.detect(bytes);
+print(detector.utf8Validity); // Utf8Validity.valid or Utf8Validity.invalid
+```
+
+`candidateEncodings` limits which encodings participate in guessing. Excluded
+probers cannot trigger early completion or suppress an allowed candidate. The
+allowlist and `languageFilter` both apply. `null` allows all encodings; an empty
+set disables all guesses. The detector copies the set on construction and
+retains it across `reset()` and `detect()`.
+
+The allowlist uses the encoding actually reported by a prober. In particular,
+the existing EUC-KR prober reports `Encoding.uhc`. ASCII is also a separate
+result: an allowlist containing only UTF-8 does not relabel ASCII as UTF-8, so
+ASCII-only input produces no candidate unless `Encoding.ascii` is allowed.
+
+A recognized BOM is always reported, even when its encoding is outside the
+allowlist. This preserves an explicit declaration so the application can detect
+and handle the conflict instead of silently guessing a different encoding.
+
+`validateUtf8` checks the original bytes independently of language models and
+candidate filtering. It rejects overlong sequences, surrogate code points,
+values above U+10FFFF, and incomplete characters at end of input. It does not
+add, remove, or rescore candidates: a BOM declaration can still report UTF-8
+while malformed payload bytes make `utf8Validity` invalid. Applications can use
+the independent result to reject malformed UTF-8 or apply their own UTF-8
+fallback policy when language statistics are inconclusive.
+
+The states are `notChecked` when disabled, `pending` until input ends, `valid`
+after a successful `close()`, or `invalid` once an error is found (including a
+truncated character at `close()`). Empty input is valid UTF-8, though it still
+has no encoding candidates. Validity means the bytes can be decoded as UTF-8;
+it does not prove their original encoding or that they are text.
+
+For streaming validation, feed **all** chunks even if `feed()` returns `true`:
+
+```dart
+detector.reset();
+for (final chunk in chunks) {
+  detector.feed(chunk); // Continue even if encoding detection has finished.
+}
+detector.close();
+print(detector.utf8Validity);
+```
+
+`reset()` clears validation state; chunks submitted after `close()` are ignored.
+
 ## Language weights
 
 Language weights provide the functionality of upstream `uchardet_weigh_language`

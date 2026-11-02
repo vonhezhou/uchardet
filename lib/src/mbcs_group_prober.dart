@@ -70,8 +70,10 @@ class MBCSGroupProber extends CharSetProber {
   @override
   List<CharSetCandidate> getCandidates() => _mCandidates;
 
-  MBCSGroupProber({required LanguageFilter languageFilter})
-    : _mProbers = _createProbers(languageFilter) {
+  MBCSGroupProber({
+    required LanguageFilter languageFilter,
+    Set<Encoding>? candidateEncodings,
+  }) : _mProbers = _createProbers(languageFilter, candidateEncodings) {
     reset();
   }
 
@@ -91,7 +93,9 @@ class MBCSGroupProber extends CharSetProber {
   ProberState feed(Uint8List aBuf) {
     var start = 0;
     var keepNext = _mKeepNext;
-    final utf8Prober = _mProbers.first as UTF8Prober;
+    // UTF-8 若启用始终排在首位，避免每个输入块创建筛选迭代器。
+    final firstProber = _mProbers.firstOrNull;
+    final utf8Prober = firstProber is UTF8Prober ? firstProber : null;
     // 与上游一致：保留高位字节及其后的两个 ASCII，其他 ASCII 仅用于语言统计。
     for (var pos = 0; pos < aBuf.length; pos++) {
       if (isNonAsciiHighByte(aBuf[pos])) {
@@ -103,7 +107,7 @@ class MBCSGroupProber extends CharSetProber {
           if (mState == ProberState.foundIt) return mState;
         }
       } else {
-        utf8Prober.feedCodePoint(aBuf[pos]);
+        utf8Prober?.feedCodePoint(aBuf[pos]);
       }
     }
     if (keepNext != 0) {
@@ -163,41 +167,37 @@ class MBCSGroupProber extends CharSetProber {
     }
   }
 
-  static List<CharSetProber> _createProbers(LanguageFilter langFilter) {
-    var probers = <CharSetProber>[];
-    probers.add(UTF8Prober());
-    if (langFilter.isEnabled(LanguageFilterType.kJapanese)) {
-      probers.addAll([
-        SJISProber(langFilter.isOnly(LanguageFilterType.kJapanese)),
-        EUCJPProber(langFilter.isOnly(LanguageFilterType.kJapanese)),
-      ]);
-    }
-
-    if (langFilter.isEnabled(LanguageFilterType.kChineseSimplified)) {
-      probers.add(
+  static List<CharSetProber> _createProbers(
+    LanguageFilter langFilter,
+    Set<Encoding>? candidateEncodings,
+  ) {
+    bool allows(Encoding encoding) =>
+        candidateEncodings?.contains(encoding) ?? true;
+    return [
+      if (allows(Encoding.utf8)) UTF8Prober(),
+      if (langFilter.isEnabled(LanguageFilterType.kJapanese)) ...[
+        if (allows(Encoding.shiftJIS))
+          SJISProber(langFilter.isOnly(LanguageFilterType.kJapanese)),
+        if (allows(Encoding.eucJP))
+          EUCJPProber(langFilter.isOnly(LanguageFilterType.kJapanese)),
+      ],
+      if (langFilter.isEnabled(LanguageFilterType.kChineseSimplified) &&
+          allows(Encoding.gb18030))
         GB18030Prober(langFilter.isOnly(LanguageFilterType.kChineseSimplified)),
-      );
-    }
-
-    CharSetProber? pendingProber;
-    if (langFilter.isEnabled(LanguageFilterType.kKorean)) {
-      probers.add(EUCKRProber(langFilter.isOnly(LanguageFilterType.kKorean)));
-      pendingProber = JohabProber(
-        langFilter.isOnly(LanguageFilterType.kKorean),
-      );
-    }
-
-    if (langFilter.isEnabled(LanguageFilterType.kChineseTraditional)) {
-      probers.addAll([
-        Big5Prober(),
-        EUCTWProber(langFilter.isOnly(LanguageFilterType.kChineseTraditional)),
-      ]);
-    }
-
-    if (pendingProber != null) {
-      probers.add(pendingProber);
-    }
-
-    return probers;
+      // 现有 EUC-KR 探测器实际报告 UHC，按返回的编码枚举筛选。
+      if (langFilter.isEnabled(LanguageFilterType.kKorean) &&
+          allows(Encoding.uhc))
+        EUCKRProber(langFilter.isOnly(LanguageFilterType.kKorean)),
+      if (langFilter.isEnabled(LanguageFilterType.kChineseTraditional)) ...[
+        if (allows(Encoding.big5)) Big5Prober(),
+        if (allows(Encoding.eucTW))
+          EUCTWProber(
+            langFilter.isOnly(LanguageFilterType.kChineseTraditional),
+          ),
+      ],
+      if (langFilter.isEnabled(LanguageFilterType.kKorean) &&
+          allows(Encoding.johab))
+        JohabProber(langFilter.isOnly(LanguageFilterType.kKorean)),
+    ];
   }
 }

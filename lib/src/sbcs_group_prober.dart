@@ -80,9 +80,12 @@ import "./lang_models/lang_turkish_model.dart";
 import "./lang_models/lang_ukrainian_model.dart";
 import "./lang_models/lang_vietnamese_model.dart";
 import './sbcs_prober.dart';
+import './internal_types.dart';
+import './types.dart';
 
 class SBCSGroupProber extends CharSetGroupProber {
-  SBCSGroupProber() : super(mProbers: _createSBProbers()) {
+  SBCSGroupProber({Set<Encoding>? candidateEncodings})
+    : super(mProbers: _createSBProbers(candidateEncodings)) {
     reset();
   }
 
@@ -102,26 +105,38 @@ class SBCSGroupProber extends CharSetGroupProber {
     return super.feed(newBuf);
   }
 
-  static List<CharSetProber> _createSBProbers() {
+  static List<CharSetProber> _createSBProbers(
+    Set<Encoding>? candidateEncodings,
+  ) {
+    bool allows(Encoding encoding) =>
+        candidateEncodings?.contains(encoding) ?? true;
+    SingleByteCharSetProber? createProber(
+      SequenceModel model, {
+      bool reversed = false,
+    }) =>
+        allows(model.mEncoding)
+            ? SingleByteCharSetProber(model: model, reversed: reversed)
+            : null;
     /* We create more probers than sequence models because of Hebrew handling,
    * making Windows_1255HebrewModel and Ibm862HebrewModel used twice, while
    * Iso_8859_8HebrewModel is currently unused.
    */
-    return [
-      SingleByteCharSetProber(model: Windows_1251RussianModel),
-      SingleByteCharSetProber(model: Koi8_RRussianModel),
-      SingleByteCharSetProber(model: Iso_8859_5RussianModel),
-      SingleByteCharSetProber(model: Mac_CyrillicRussianModel),
-      SingleByteCharSetProber(model: Ibm866RussianModel),
-      SingleByteCharSetProber(model: Ibm855RussianModel),
+    return <CharSetProber?>[
+      createProber(Windows_1251RussianModel),
+      createProber(Koi8_RRussianModel),
+      createProber(Iso_8859_5RussianModel),
+      createProber(Mac_CyrillicRussianModel),
+      createProber(Ibm866RussianModel),
+      createProber(Ibm855RussianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_7GreekModel),
-      SingleByteCharSetProber(model: Windows_1253GreekModel),
-      SingleByteCharSetProber(model: Cp737GreekModel),
+      createProber(Iso_8859_7GreekModel),
+      createProber(Windows_1253GreekModel),
+      createProber(Cp737GreekModel),
 
-      SingleByteCharSetProber(model: Iso_8859_5BulgarianModel),
-      SingleByteCharSetProber(model: Windows_1251BulgarianModel),
-      HebrewProber(),
+      createProber(Iso_8859_5BulgarianModel),
+      createProber(Windows_1251BulgarianModel),
+      if (allows(Encoding.windows1255) || allows(Encoding.iso_8859_8))
+        HebrewProber(candidateEncodings: candidateEncodings),
 
       /* XXX: I should verify a bit more closely the Hebrew case. It doesn't look to
    * me like the additional data handling in nsHebrewProber is really needed
@@ -134,148 +149,148 @@ class SBCSGroupProber extends CharSetGroupProber {
    * in logical order.")
    */
       // Logical Hebrew
-      SingleByteCharSetProber(model: Ibm862HebrewModel, reversed: false),
+      createProber(Ibm862HebrewModel, reversed: false),
 
       // Visual Hebrew
-      SingleByteCharSetProber(model: Ibm862HebrewModel, reversed: true),
+      createProber(Ibm862HebrewModel, reversed: true),
 
-      SingleByteCharSetProber(model: Tis_620ThaiModel),
-      SingleByteCharSetProber(model: Iso_8859_11ThaiModel),
+      createProber(Tis_620ThaiModel),
+      createProber(Iso_8859_11ThaiModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1FrenchModel),
-      SingleByteCharSetProber(model: Iso_8859_15FrenchModel),
-      SingleByteCharSetProber(model: Windows_1252FrenchModel),
+      createProber(Iso_8859_1FrenchModel),
+      createProber(Iso_8859_15FrenchModel),
+      createProber(Windows_1252FrenchModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1SpanishModel),
-      SingleByteCharSetProber(model: Iso_8859_15SpanishModel),
-      SingleByteCharSetProber(model: Windows_1252SpanishModel),
+      createProber(Iso_8859_1SpanishModel),
+      createProber(Iso_8859_15SpanishModel),
+      createProber(Windows_1252SpanishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_2HungarianModel),
-      SingleByteCharSetProber(model: Windows_1250HungarianModel),
+      createProber(Iso_8859_2HungarianModel),
+      createProber(Windows_1250HungarianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1GermanModel),
-      SingleByteCharSetProber(model: Windows_1252GermanModel),
+      createProber(Iso_8859_1GermanModel),
+      createProber(Windows_1252GermanModel),
 
-      SingleByteCharSetProber(model: Iso_8859_3EsperantoModel),
+      createProber(Iso_8859_3EsperantoModel),
 
-      SingleByteCharSetProber(model: Iso_8859_3TurkishModel),
-      SingleByteCharSetProber(model: Iso_8859_9TurkishModel),
+      createProber(Iso_8859_3TurkishModel),
+      createProber(Iso_8859_9TurkishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_6ArabicModel),
-      SingleByteCharSetProber(model: Windows_1256ArabicModel),
+      createProber(Iso_8859_6ArabicModel),
+      createProber(Windows_1256ArabicModel),
 
-      SingleByteCharSetProber(model: VisciiVietnameseModel),
-      SingleByteCharSetProber(model: Windows_1258VietnameseModel),
+      createProber(VisciiVietnameseModel),
+      createProber(Windows_1258VietnameseModel),
 
-      SingleByteCharSetProber(model: Iso_8859_15DanishModel),
-      SingleByteCharSetProber(model: Iso_8859_1DanishModel),
-      SingleByteCharSetProber(model: Windows_1252DanishModel),
-      SingleByteCharSetProber(model: Ibm865DanishModel),
+      createProber(Iso_8859_15DanishModel),
+      createProber(Iso_8859_1DanishModel),
+      createProber(Windows_1252DanishModel),
+      createProber(Ibm865DanishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_13LithuanianModel),
-      SingleByteCharSetProber(model: Iso_8859_10LithuanianModel),
-      SingleByteCharSetProber(model: Iso_8859_4LithuanianModel),
+      createProber(Iso_8859_13LithuanianModel),
+      createProber(Iso_8859_10LithuanianModel),
+      createProber(Iso_8859_4LithuanianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_13LatvianModel),
-      SingleByteCharSetProber(model: Iso_8859_10LatvianModel),
-      SingleByteCharSetProber(model: Iso_8859_4LatvianModel),
+      createProber(Iso_8859_13LatvianModel),
+      createProber(Iso_8859_10LatvianModel),
+      createProber(Iso_8859_4LatvianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1PortugueseModel),
-      SingleByteCharSetProber(model: Iso_8859_9PortugueseModel),
-      SingleByteCharSetProber(model: Iso_8859_15PortugueseModel),
-      SingleByteCharSetProber(model: Windows_1252PortugueseModel),
+      createProber(Iso_8859_1PortugueseModel),
+      createProber(Iso_8859_9PortugueseModel),
+      createProber(Iso_8859_15PortugueseModel),
+      createProber(Windows_1252PortugueseModel),
 
-      SingleByteCharSetProber(model: Iso_8859_3MalteseModel),
+      createProber(Iso_8859_3MalteseModel),
 
-      SingleByteCharSetProber(model: Windows_1250CzechModel),
-      SingleByteCharSetProber(model: Iso_8859_2CzechModel),
-      SingleByteCharSetProber(model: Mac_CentraleuropeCzechModel),
-      SingleByteCharSetProber(model: Ibm852CzechModel),
+      createProber(Windows_1250CzechModel),
+      createProber(Iso_8859_2CzechModel),
+      createProber(Mac_CentraleuropeCzechModel),
+      createProber(Ibm852CzechModel),
 
-      SingleByteCharSetProber(model: Windows_1250SlovakModel),
-      SingleByteCharSetProber(model: Iso_8859_2SlovakModel),
-      SingleByteCharSetProber(model: Mac_CentraleuropeSlovakModel),
-      SingleByteCharSetProber(model: Ibm852SlovakModel),
+      createProber(Windows_1250SlovakModel),
+      createProber(Iso_8859_2SlovakModel),
+      createProber(Mac_CentraleuropeSlovakModel),
+      createProber(Ibm852SlovakModel),
 
-      SingleByteCharSetProber(model: Windows_1250PolishModel),
-      SingleByteCharSetProber(model: Iso_8859_2PolishModel),
-      SingleByteCharSetProber(model: Iso_8859_13PolishModel),
-      SingleByteCharSetProber(model: Iso_8859_16PolishModel),
-      SingleByteCharSetProber(model: Mac_CentraleuropePolishModel),
-      SingleByteCharSetProber(model: Ibm852PolishModel),
+      createProber(Windows_1250PolishModel),
+      createProber(Iso_8859_2PolishModel),
+      createProber(Iso_8859_13PolishModel),
+      createProber(Iso_8859_16PolishModel),
+      createProber(Mac_CentraleuropePolishModel),
+      createProber(Ibm852PolishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1FinnishModel),
-      SingleByteCharSetProber(model: Iso_8859_4FinnishModel),
-      SingleByteCharSetProber(model: Iso_8859_9FinnishModel),
-      SingleByteCharSetProber(model: Iso_8859_13FinnishModel),
-      SingleByteCharSetProber(model: Iso_8859_15FinnishModel),
-      SingleByteCharSetProber(model: Windows_1252FinnishModel),
+      createProber(Iso_8859_1FinnishModel),
+      createProber(Iso_8859_4FinnishModel),
+      createProber(Iso_8859_9FinnishModel),
+      createProber(Iso_8859_13FinnishModel),
+      createProber(Iso_8859_15FinnishModel),
+      createProber(Windows_1252FinnishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1ItalianModel),
-      SingleByteCharSetProber(model: Iso_8859_3ItalianModel),
-      SingleByteCharSetProber(model: Iso_8859_9ItalianModel),
-      SingleByteCharSetProber(model: Iso_8859_15ItalianModel),
-      SingleByteCharSetProber(model: Windows_1252ItalianModel),
+      createProber(Iso_8859_1ItalianModel),
+      createProber(Iso_8859_3ItalianModel),
+      createProber(Iso_8859_9ItalianModel),
+      createProber(Iso_8859_15ItalianModel),
+      createProber(Windows_1252ItalianModel),
 
-      SingleByteCharSetProber(model: Windows_1250CroatianModel),
-      SingleByteCharSetProber(model: Iso_8859_2CroatianModel),
-      SingleByteCharSetProber(model: Iso_8859_13CroatianModel),
-      SingleByteCharSetProber(model: Iso_8859_16CroatianModel),
-      SingleByteCharSetProber(model: Mac_CentraleuropeCroatianModel),
-      SingleByteCharSetProber(model: Ibm852CroatianModel),
+      createProber(Windows_1250CroatianModel),
+      createProber(Iso_8859_2CroatianModel),
+      createProber(Iso_8859_13CroatianModel),
+      createProber(Iso_8859_16CroatianModel),
+      createProber(Mac_CentraleuropeCroatianModel),
+      createProber(Ibm852CroatianModel),
 
-      SingleByteCharSetProber(model: Windows_1252EstonianModel),
-      SingleByteCharSetProber(model: Windows_1257EstonianModel),
-      SingleByteCharSetProber(model: Iso_8859_4EstonianModel),
-      SingleByteCharSetProber(model: Iso_8859_13EstonianModel),
-      SingleByteCharSetProber(model: Iso_8859_15EstonianModel),
+      createProber(Windows_1252EstonianModel),
+      createProber(Windows_1257EstonianModel),
+      createProber(Iso_8859_4EstonianModel),
+      createProber(Iso_8859_13EstonianModel),
+      createProber(Iso_8859_15EstonianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1IrishModel),
-      SingleByteCharSetProber(model: Iso_8859_9IrishModel),
-      SingleByteCharSetProber(model: Iso_8859_15IrishModel),
-      SingleByteCharSetProber(model: Windows_1252IrishModel),
+      createProber(Iso_8859_1IrishModel),
+      createProber(Iso_8859_9IrishModel),
+      createProber(Iso_8859_15IrishModel),
+      createProber(Windows_1252IrishModel),
 
-      SingleByteCharSetProber(model: Windows_1250RomanianModel),
-      SingleByteCharSetProber(model: Iso_8859_2RomanianModel),
-      SingleByteCharSetProber(model: Iso_8859_16RomanianModel),
-      SingleByteCharSetProber(model: Ibm852RomanianModel),
+      createProber(Windows_1250RomanianModel),
+      createProber(Iso_8859_2RomanianModel),
+      createProber(Iso_8859_16RomanianModel),
+      createProber(Ibm852RomanianModel),
 
-      SingleByteCharSetProber(model: Windows_1250SloveneModel),
-      SingleByteCharSetProber(model: Iso_8859_2SloveneModel),
-      SingleByteCharSetProber(model: Iso_8859_16SloveneModel),
-      SingleByteCharSetProber(model: Mac_CentraleuropeSloveneModel),
-      SingleByteCharSetProber(model: Ibm852SloveneModel),
+      createProber(Windows_1250SloveneModel),
+      createProber(Iso_8859_2SloveneModel),
+      createProber(Iso_8859_16SloveneModel),
+      createProber(Mac_CentraleuropeSloveneModel),
+      createProber(Ibm852SloveneModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1SwedishModel),
-      SingleByteCharSetProber(model: Iso_8859_4SwedishModel),
-      SingleByteCharSetProber(model: Iso_8859_9SwedishModel),
-      SingleByteCharSetProber(model: Iso_8859_15SwedishModel),
-      SingleByteCharSetProber(model: Windows_1252SwedishModel),
+      createProber(Iso_8859_1SwedishModel),
+      createProber(Iso_8859_4SwedishModel),
+      createProber(Iso_8859_9SwedishModel),
+      createProber(Iso_8859_15SwedishModel),
+      createProber(Windows_1252SwedishModel),
 
-      SingleByteCharSetProber(model: Iso_8859_15NorwegianModel),
-      SingleByteCharSetProber(model: Iso_8859_1NorwegianModel),
-      SingleByteCharSetProber(model: Windows_1252NorwegianModel),
-      SingleByteCharSetProber(model: Ibm865NorwegianModel),
-      SingleByteCharSetProber(model: Iso_8859_1EnglishModel),
-      SingleByteCharSetProber(model: Windows_1252EnglishModel),
+      createProber(Iso_8859_15NorwegianModel),
+      createProber(Iso_8859_1NorwegianModel),
+      createProber(Windows_1252NorwegianModel),
+      createProber(Ibm865NorwegianModel),
+      createProber(Iso_8859_1EnglishModel),
+      createProber(Windows_1252EnglishModel),
 
-      SingleByteCharSetProber(model: Windows_1251BelarusianModel),
-      SingleByteCharSetProber(model: Iso_8859_5BelarusianModel),
+      createProber(Windows_1251BelarusianModel),
+      createProber(Iso_8859_5BelarusianModel),
 
-      SingleByteCharSetProber(model: Windows_1251UkrainianModel),
+      createProber(Windows_1251UkrainianModel),
 
-      SingleByteCharSetProber(model: Windows_1251SerbianModel),
-      SingleByteCharSetProber(model: Iso_8859_5SerbianModel),
+      createProber(Windows_1251SerbianModel),
+      createProber(Iso_8859_5SerbianModel),
 
-      SingleByteCharSetProber(model: Windows_1251MacedonianModel),
-      SingleByteCharSetProber(model: Ibm855MacedonianModel),
-      SingleByteCharSetProber(model: Iso_8859_5MacedonianModel),
+      createProber(Windows_1251MacedonianModel),
+      createProber(Ibm855MacedonianModel),
+      createProber(Iso_8859_5MacedonianModel),
 
-      SingleByteCharSetProber(model: Iso_8859_1CatalanModel),
-      SingleByteCharSetProber(model: Windows_1252CatalanModel),
+      createProber(Iso_8859_1CatalanModel),
+      createProber(Windows_1252CatalanModel),
 
-      SingleByteCharSetProber(model: Georgian_AcademyGeorgianModel),
-      SingleByteCharSetProber(model: Georgian_PsGeorgianModel),
-    ];
+      createProber(Georgian_AcademyGeorgianModel),
+      createProber(Georgian_PsGeorgianModel),
+    ].whereType<CharSetProber>().toList();
   }
 }
